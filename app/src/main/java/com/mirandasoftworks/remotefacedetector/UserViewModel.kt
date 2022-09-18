@@ -38,4 +38,30 @@ class UserViewModel: ViewModel() {
     fun getListUser() : LiveData<ArrayList<User>>{
         return listUser
     }
+
+
+    fun setSearchUser(query: String){
+        Retrofit.apiInstance
+            .getSearchUser(query)
+            .enqueue(object : Callback<SearchResponse>{
+                override fun onResponse(
+                    call: Call<SearchResponse>,
+                    response: Response<SearchResponse>
+                ) {
+                    if (response.isSuccessful){
+                        listUser.postValue(response.body()?.items)
+                        Log.d("Get Search Success", response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                    t.message?.let { Log.d("Get Search Failure", it) }
+                }
+
+            })
+    }
+
+    fun getSearchUser() : LiveData<ArrayList<User>>{
+        return listUser
+    }
 }

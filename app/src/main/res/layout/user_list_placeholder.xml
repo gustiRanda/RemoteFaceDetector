@@ -12,16 +12,14 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
-
-
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_avatar"
             android:layout_width="70dp"
             android:layout_height="70dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/roundedImageView"
-            tools:src="@tools:sample/avatars"/>
+            android:background="#DDDDDD"
+            app:shapeAppearanceOverlay="@style/roundedImageView"/>
 
 
         <TextView
@@ -31,9 +29,11 @@
             android:layout_marginStart="5dp"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:background="#DDDDDD"
+            android:textColor="#00000000"
             app:layout_constraintStart_toEndOf="@+id/iv_avatar"
             app:layout_constraintTop_toTopOf="@id/iv_avatar"
-            tools:text="Ilham Gusti Randa" />
+            android:text="Ilham Gusti Randa" />
 
         <TextView
             android:id="@+id/tv_location"
@@ -41,9 +41,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textSize="16sp"
+            android:background="#DDDDDD"
+            android:textColor="#00000000"
             app:layout_constraintTop_toBottomOf="@+id/tv_username"
             app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-            tools:text="B 203" />
+            android:text="B 203" />
 
         <TextView
             android:id="@+id/tv_time"
@@ -51,8 +53,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textSize="16sp"
+            android:background="#DDDDDD"
+            android:textColor="#00000000"
             app:layout_constraintTop_toBottomOf="@+id/tv_location"
             app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-            tools:text="16:00 WIB" />
+            android:text="16:00 WIB" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

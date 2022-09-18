@@ -1,5 +1,6 @@
 package com.mirandasoftworks.remotefacedetector.api
 
+import com.mirandasoftworks.remotefacedetector.SearchResponse
 import com.mirandasoftworks.remotefacedetector.model.User
 import retrofit2.Call
 import retrofit2.http.GET
@@ -8,11 +9,11 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface Api {
-//    @GET("search/users")
-//    @Headers("Authorization: token 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")
-//    fun getSearchUser(
-//        @Query("q") query: String
-//    ): Call<SearchResponse>
+    @GET("search/users")
+    @Headers("Authorization: token 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")
+    fun getSearchUser(
+        @Query("q") query: String
+    ): Call<SearchResponse>
 
     @GET("users")
     @Headers("Authorization: token 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")
