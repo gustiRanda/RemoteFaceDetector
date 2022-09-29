@@ -1,33 +1,33 @@
 package com.mirandasoftworks.remotefacedetector
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mirandasoftworks.remotefacedetector.databinding.UserListBinding
-import com.mirandasoftworks.remotefacedetector.model.User
+import com.mirandasoftworks.remotefacedetector.model.Dosen
+import com.mirandasoftworks.remotefacedetector.model.Mahasiswa
 
-class UserAdapter : RecyclerView.Adapter<UserAdapter.ListViewHolder>() {
+class MahasiswaAdapter : RecyclerView.Adapter<MahasiswaAdapter.ListViewHolder>() {
 
-    private val listUser = ArrayList<User>()
+    private val listMahasiswa = ArrayList<Mahasiswa>()
 
-    fun setListUser(list: ArrayList<User>){
-        listUser.clear()
-        listUser.addAll(list)
+    fun setData(list: ArrayList<Mahasiswa>){
+        listMahasiswa.clear()
+        listMahasiswa.addAll(list)
         notifyDataSetChanged()
     }
 
 
 
     class ListViewHolder(itemView: UserListBinding) : RecyclerView.ViewHolder(itemView.root) {
-        fun bind(user: User) {
+        fun bind(mahasiswa: Mahasiswa) {
             with(binding){
                 Glide.with(itemView)
-                    .load(user.avatar_url)
+                    .load(mahasiswa.avatar_url)
                     .into(ivAvatar)
 
-                tvUsername.text = user.login
+                tvUsername.text = mahasiswa.login
 //                tvLocation.text = user.location
 //                tvTime.text = user.time
             }
@@ -42,8 +42,8 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ListViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.bind(listUser[position])
+        holder.bind(listMahasiswa[position])
     }
 
-    override fun getItemCount(): Int = listUser.size
+    override fun getItemCount(): Int = listMahasiswa.size
 }

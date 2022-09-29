@@ -1,6 +1,6 @@
 package com.mirandasoftworks.remotefacedetector.model
 
-data class User(
+data class Mahasiswa(
     val id : Int,
     val login : String,
     val avatar_url : String

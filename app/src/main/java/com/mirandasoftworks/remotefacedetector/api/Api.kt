@@ -1,11 +1,12 @@
 package com.mirandasoftworks.remotefacedetector.api
 
-import com.mirandasoftworks.remotefacedetector.model.User
+import com.mirandasoftworks.remotefacedetector.model.DetailDosenResponse
+import com.mirandasoftworks.remotefacedetector.model.Dosen
+import com.mirandasoftworks.remotefacedetector.model.Mahasiswa
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface Api {
 //    @GET("search/users")
@@ -16,13 +17,17 @@ interface Api {
 
     @GET("users")
     @Headers("Authorization: token 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")
-    fun getListUser(): Call<ArrayList<User>>
+    fun getListDosen(): Call<ArrayList<Dosen>>
 
-//    @GET("users/{username}")
-//    @Headers("Authorization: token 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")
-//    fun getDetailUser(
-//        @Path("username") username : String
-//    ): Call<DetailUserResponse>
+    @GET("users")
+    @Headers("Authorization: token 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")
+    fun getListMahasiswa(): Call<ArrayList<Mahasiswa>>
+
+    @GET("users/{username}")
+    @Headers("Authorization: token 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")
+    fun getDetailDosen(
+        @Path("username") username : String
+    ): Call<DetailDosenResponse>
 
 //    @GET("users/{username}/followers")
 //    @Headers("Authorization: token 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")

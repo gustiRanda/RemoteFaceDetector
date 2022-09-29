@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/dosenFragment">
+
+    <fragment
+        android:id="@+id/dosenFragment"
+        android:name="com.mirandasoftworks.remotefacedetector.DosenFragment"
+        android:label="Daftar Dosen"
+        tools:layout="@layout/fragment_dosen" />
+
+    <fragment
+        android:id="@+id/mahasiswaFragment"
+        android:name="com.mirandasoftworks.remotefacedetector.MahasiswaFragment"
+        android:label="Daftar Mahasiswa"
+        tools:layout="@layout/fragment_mahasiswa" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.mirandasoftworks.remotefacedetector.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+
+</navigation>

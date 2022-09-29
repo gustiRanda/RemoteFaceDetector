@@ -2,57 +2,36 @@ package com.mirandasoftworks.remotefacedetector
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mirandasoftworks.remotefacedetector.databinding.ActivityMainBinding
-import com.mirandasoftworks.remotefacedetector.model.User
+import com.mirandasoftworks.remotefacedetector.model.Dosen
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-//    private val listUser = ArrayList<User>()
-    private lateinit var userAdapter: UserAdapter
-    private lateinit var userViewModel: UserViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        userAdapter = UserAdapter(listUser)
-        userAdapter = UserAdapter()
-        userAdapter.notifyDataSetChanged()
+        val navView: BottomNavigationView = binding.navView
 
-        userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[UserViewModel::class.java]
-
-        binding.rvUser.layoutManager = LinearLayoutManager(this)
-        binding.rvUser.setHasFixedSize(true)
-        binding.rvUser.adapter = userAdapter
-
-        showLoading(true)
-        userViewModel.setListUser()
-
-        userViewModel.getListUser().observe(this) {
-//            if (it!=null){
-//                userAdapter.setListUser(it)
-//                showLoading(false)
-//            }
-
-            userAdapter.setListUser(it)
-            showLoading(false)
-        }
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.dosenFragment, R.id.mahasiswaFragment, R.id.profileFragment
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
     }
-
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            binding.rvProgressBar.visibility = View.VISIBLE
-        } else {
-            binding.rvProgressBar.visibility = View.GONE
-        }
-    }
-
 }
