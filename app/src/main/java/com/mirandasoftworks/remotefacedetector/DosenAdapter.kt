@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.mirandasoftworks.remotefacedetector.databinding.UserListBinding
 import com.mirandasoftworks.remotefacedetector.model.Dosen
 
@@ -26,7 +27,7 @@ class DosenAdapter : RecyclerView.Adapter<DosenAdapter.ListViewHolder>() {
 
 
 
-    class ListViewHolder(itemView: UserListBinding) : RecyclerView.ViewHolder(itemView.root) {
+    inner class ListViewHolder(itemView: UserListBinding) : RecyclerView.ViewHolder(itemView.root) {
         private val binding = itemView
 //      fun bind(dosen: Dosen) {
 //          itemView.rootView
@@ -47,15 +48,19 @@ class DosenAdapter : RecyclerView.Adapter<DosenAdapter.ListViewHolder>() {
 
         fun bind(dosen: Dosen) {
             with(binding){
-                Glide.with(itemView)
-                    .load(dosen.avatar_url)
-                    .into(ivAvatar)
 
                 tvUsername.text = dosen.login
+                tvLocation.text = dosen.avatar_url
+                tvTime.text = dosen.id.toString()
 //                tvLocation.text = user.location
 //                tvTime.text = user.time
                 root.setOnClickListener {
-                    Toast.makeText(itemView.context, dosen.login, Toast.LENGTH_SHORT).show()
+                    onItemClickCallback.onItemClicked(dosen)
+                    Toast.makeText(it.context, dosen.login, Toast.LENGTH_SHORT).show()
+
+                        //uses snackbar recomended uses coordinator layoit or anchor view
+                    Snackbar.make(it, dosen.login, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+
                 }
             }
         }

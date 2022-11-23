@@ -6,10 +6,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mirandasoftworks.remotefacedetector.databinding.ActivityMainBinding
-import com.mirandasoftworks.remotefacedetector.model.Dosen
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.dosenFragment, R.id.mahasiswaFragment, R.id.profileFragment
+                R.id.dosenFragment, R.id.searchFragment, R.id.profileFragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

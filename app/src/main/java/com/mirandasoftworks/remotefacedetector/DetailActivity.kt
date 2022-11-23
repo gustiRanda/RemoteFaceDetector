@@ -1,6 +1,7 @@
 package com.mirandasoftworks.remotefacedetector
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +28,8 @@ class DetailActivity : AppCompatActivity() {
         detailDosenViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailDosenViewModel::class.java)
 
         detailDosenViewModel.setDetailDosen(username!!)
+        showLoading(true)
+
         detailDosenViewModel.getDetailDosen().observe(this, Observer {
             binding.apply {
                 tvDetailDosenUsername.text = it.login
@@ -36,6 +39,7 @@ class DetailActivity : AppCompatActivity() {
                         .load(it.avatar_url)
                         .into(ivDetailDosen)
                 }
+                showLoading(false)
             }
 
 //            Glide.with(this)
@@ -43,5 +47,13 @@ class DetailActivity : AppCompatActivity() {
 //                .into(binding.ivDetailDosen)
         })
 
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            binding.rvProgressBar.visibility = View.VISIBLE
+        } else {
+            binding.rvProgressBar.visibility = View.GONE
+        }
     }
 }
