@@ -26,11 +26,6 @@ class DosenFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-//        val mainViewModel =
-//            ViewModelProvider(this).get(UserViewModel::class.java)
-
-
         // Inflate the layout for this fragment
 
         _binding = FragmentDosenBinding.inflate(inflater, container, false)
@@ -50,9 +45,12 @@ class DosenFragment : Fragment() {
 
         dosenViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DosenViewModel::class.java]
 
-        binding.rvDosen.layoutManager = LinearLayoutManager(activity)
-        binding.rvDosen.setHasFixedSize(true)
-        binding.rvDosen.adapter = dosenAdapter
+        with(binding){
+            rvDosen.layoutManager = LinearLayoutManager(activity)
+            rvDosen.setHasFixedSize(true)
+            rvDosen.adapter = dosenAdapter
+        }
+
 
         showLoading(true)
         dosenViewModel.setListDosen()

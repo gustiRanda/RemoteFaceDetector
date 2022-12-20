@@ -15,22 +15,23 @@ class SearchViewModel: ViewModel() {
 
     private val listSearch = MutableLiveData<ArrayList<Dosen>>()
 
-    fun setListSearch(){
+    fun setListSearch(query: String){
         Retrofit.apiInstance
-            .getListDosen()
-            .enqueue(object : Callback<ArrayList<Dosen>>{
+            .getSearchUser(query)
+            .enqueue(object : Callback<SearchResponse>{
+
                 override fun onResponse(
-                    call: Call<ArrayList<Dosen>>,
-                    response: Response<ArrayList<Dosen>>
+                    call: Call<SearchResponse>,
+                    response: Response<SearchResponse>
                 ) {
                     if (response.isSuccessful){
-                        listSearch.postValue(response.body())
-                        Log.d("Get List Search Success", response.code().toString())
+                        listSearch.postValue(response.body()?.items)
+                        Log.d("Get Search Success", response.code().toString())
                     }
                 }
 
-                override fun onFailure(call: Call<ArrayList<Dosen>>, t: Throwable) {
-                    t.message?.let { Log.d("Get List Search Failed", it) }
+                override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                    t.message?.let { Log.d("Get Search Failure", it) }
                 }
 
             })

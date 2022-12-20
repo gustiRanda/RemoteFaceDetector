@@ -54,18 +54,18 @@
             android:id="@+id/ln_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/ln_detail_profile"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            app:layout_constraintTop_toBottomOf="@id/ln_detail_profile">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="clip_horizontal"
                 android:layout_margin="3dp"
-                android:text="Riwayat Kehadiran :"/>
+                android:text="Riwayat Kehadiran :" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_dosen"
@@ -81,16 +81,16 @@
                 tools:listitem="@layout/user_list" />
 
 
-<!--            <include-->
-<!--                layout="@layout/user_history_placeholder"/><include-->
-<!--                layout="@layout/user_history_placeholder"/><include-->
-<!--                layout="@layout/user_history_placeholder"/><include-->
-<!--                layout="@layout/user_history_placeholder"/><include-->
-<!--                layout="@layout/user_history_placeholder"/><include-->
-<!--                layout="@layout/user_history_placeholder"/><include-->
-<!--                layout="@layout/user_history_placeholder"/><include-->
-<!--                layout="@layout/user_history_placeholder"/><include-->
-<!--                layout="@layout/user_history_placeholder"/>-->
+            <!--            <include-->
+            <!--                layout="@layout/user_history_placeholder"/><include-->
+            <!--                layout="@layout/user_history_placeholder"/><include-->
+            <!--                layout="@layout/user_history_placeholder"/><include-->
+            <!--                layout="@layout/user_history_placeholder"/><include-->
+            <!--                layout="@layout/user_history_placeholder"/><include-->
+            <!--                layout="@layout/user_history_placeholder"/><include-->
+            <!--                layout="@layout/user_history_placeholder"/><include-->
+            <!--                layout="@layout/user_history_placeholder"/><include-->
+            <!--                layout="@layout/user_history_placeholder"/>-->
 
 
         </LinearLayout>
