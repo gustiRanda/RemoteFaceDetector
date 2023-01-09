@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "190608239796",
+    "project_id": "rfd-dte",
+    "storage_bucket": "rfd-dte.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190608239796:android:52428f72ed050cc96bbbe1",
+        "android_client_info": {
+          "package_name": "com.mirandasoftworks.remotefacedetector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "190608239796-k47efudjhoqct7tnrmd87a2f6fqgve8p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNH-19h58XcpWoy48F3WSn58LvqvAfh0c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "190608239796-k47efudjhoqct7tnrmd87a2f6fqgve8p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

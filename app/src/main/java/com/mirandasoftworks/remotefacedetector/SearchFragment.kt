@@ -36,7 +36,7 @@ class SearchFragment : Fragment() {
         searchAdapter.setOnItemClickCallback(object : SearchAdapter.OnItemClickCallback{
             override fun onItemClicked(dosen: Dosen) {
                 val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_USERNAME, dosen.login)
+                intent.putExtra(DetailActivity.EXTRA_USERNAME, dosen.nama)
                 startActivity(intent)
             }
 

@@ -46,20 +46,39 @@ class DosenAdapter : RecyclerView.Adapter<DosenAdapter.ListViewHolder>() {
 //
 //        private val binding = itemView
 
+//        fun bind(dosen: Dosen) {
+//            with(binding){
+//
+//                tvUsername.text = dosen.login
+//                tvLocation.text = dosen.avatar_url
+//                tvTime.text = dosen.id.toString()
+////                tvLocation.text = user.location
+////                tvTime.text = user.time
+//                root.setOnClickListener {
+//                    onItemClickCallback.onItemClicked(dosen)
+//                    Toast.makeText(it.context, dosen.login, Toast.LENGTH_SHORT).show()
+//
+//                        //uses snackbar recomended uses coordinator layoit or anchor view
+//                    Snackbar.make(it, dosen.login, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+//
+//                }
+//            }
+//        }
+
         fun bind(dosen: Dosen) {
             with(binding){
 
-                tvUsername.text = dosen.login
-                tvLocation.text = dosen.avatar_url
-                tvTime.text = dosen.id.toString()
+                tvUsername.text = dosen.nama
+                tvLocation.text = dosen.lokasi
+                tvTime.text = dosen.time
 //                tvLocation.text = user.location
 //                tvTime.text = user.time
                 root.setOnClickListener {
                     onItemClickCallback.onItemClicked(dosen)
-                    Toast.makeText(it.context, dosen.login, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(it.context, dosen.nama, Toast.LENGTH_SHORT).show()
 
                         //uses snackbar recomended uses coordinator layoit or anchor view
-                    Snackbar.make(it, dosen.login, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+                    dosen.nama?.let { it1 -> Snackbar.make(it, it1, Snackbar.LENGTH_SHORT).setAction("Action", null).show() }
 
                 }
             }
