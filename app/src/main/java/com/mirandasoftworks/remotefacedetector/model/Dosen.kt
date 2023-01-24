@@ -1,7 +1,5 @@
 package com.mirandasoftworks.remotefacedetector.model
 
-import java.sql.Timestamp
-
 data class Dosen(
 //    val id : Int,
 //    val login : String,
@@ -15,6 +13,8 @@ data class Dosen(
     val date: String? = "",
     val time: String? = ""
 )
+
+
 
 //data class User(
 //    val id : Int,

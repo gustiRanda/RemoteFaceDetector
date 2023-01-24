@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+
 import com.mirandasoftworks.remotefacedetector.databinding.FragmentProfileBinding
 
 
@@ -24,7 +24,7 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val db = Firebase.firestore
+        val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("presensi").document("test")
         docRef.get()
             .addOnSuccessListener { document ->

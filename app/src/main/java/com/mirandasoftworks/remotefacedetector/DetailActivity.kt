@@ -57,8 +57,8 @@ class DetailActivity : AppCompatActivity() {
 
 
         //just for data fill purposes
-        dosenAdapter = DosenAdapter()
-        dosenAdapter.notifyDataSetChanged()
+//        dosenAdapter = DosenAdapter()
+//        dosenAdapter.notifyDataSetChanged()
 
 //        dosenAdapter.setOnItemClickCallback(object : DosenAdapter.OnItemClickCallback {
 //            override fun onItemClicked(dosen: Dosen) {
@@ -85,7 +85,7 @@ class DetailActivity : AppCompatActivity() {
 //                showLoading(false)
 //            }
 
-            dosenAdapter.setData(it)
+//            dosenAdapter.setData(it)
             showLoading(false)
         }
 
