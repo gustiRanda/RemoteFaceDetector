@@ -1,21 +1,22 @@
 package com.mirandasoftworks.remotefacedetector
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.mirandasoftworks.remotefacedetector.databinding.FragmentDosenBinding
 import com.mirandasoftworks.remotefacedetector.model.Dosen
+import java.sql.Timestamp
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar
+import java.time.*
+import java.util.*
 
 
 class DosenFragment : Fragment() {
@@ -41,6 +42,7 @@ class DosenFragment : Fragment() {
         _binding = FragmentDosenBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
 //        dosenAdapter = DosenAdapter()
 
 //        dosenAdapter.setOnItemClickCallback(object : DosenAdapter.OnItemClickCallback {
@@ -53,7 +55,7 @@ class DosenFragment : Fragment() {
 //        })
 
         //get date test1
-        val calendar = Calendar.getInstance()
+//        val calendar = Calendar.getInstance()
 //        val currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.time)
 ////        Toast.makeText(requireContext(), currentDate,Toast.LENGTH_SHORT).show()
 //        Log.d("date", currentDate)
@@ -253,35 +255,117 @@ class DosenFragment : Fragment() {
 //    }
 
     private fun eventChangeListener() {
+
         val calendar = Calendar.getInstance()
+        val currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.time)
+//        Toast.makeText(requireContext(), currentDate,Toast.LENGTH_SHORT).show()
+        Log.d("date", currentDate)
+
+
+
+
+
+//        val calendar1 = Calendar.getInstance()
+//        get date test 2
+        val simpleDateFormat = SimpleDateFormat("EEEE, dd LLLL yyyy KK:mm:ss aaa z")
+        val dateTime = simpleDateFormat.format(calendar.time).toString()
+        Log.d("date1", dateTime)
+
 
         //get date test 2
-        val simpleDateFormat1 = SimpleDateFormat("EEEE, D MMMM yyyy")
-//        val simpleDateFormat1 = SimpleDateFormat("MMMM D, yyyy")
-        val dateTime1 = simpleDateFormat1.format(calendar.time).toString()
+        val simpleDateFormat1 = SimpleDateFormat("MMMM D, yyyy")
+        var dateTime1 = simpleDateFormat1.format(calendar.time).toString()
         Log.d("date2", dateTime1)
+
+        //get time test
+        val simpleTimeFormat = SimpleDateFormat("KK:mm:ss")
+        val time = simpleTimeFormat.format(calendar.time).toString()
+        Log.d("date3", time)
+
+        val currentTimeMillis = System.currentTimeMillis()
+
+        val timeStamp = Timestamp(currentTimeMillis)
+        Log.d("date5", timeStamp.toString())
+        //2023-01-25 11:20:33.885
+
+//        val zoneId: ZoneId = ZoneId.of("America/Sao_Paulo")
+//        var zdt: ZonedDateTime = ZonedDateTime.of(2015, 10, 18, 12, 0, 0, 0, zoneId)
+//        zdt = zdt.toLocalDate().atStartOfDay(zoneId)
+//        println(zdt) // 2015-10-18T01:00-02:00[America/Sao_Paulo]
+
+        val startOfDay = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val dateTime4 = Timestamp(startOfDay)
+        Log.d("date4", startOfDay.toString())
+        Log.d("date4", dateTime4.toString())
 
 
         val db = FirebaseFirestore.getInstance()
-        val collection = db.collection("presensiIlhamTest")
+        val collection = db.collection("presensi")
         val query = collection
-            .whereEqualTo("date", dateTime1)
-            .orderBy("time", Query.Direction.DESCENDING)
 
-//        val countQuery = query.count()
+            .whereGreaterThanOrEqualTo("datetime", dateTime4)
+            .orderBy("datetime", Query.Direction.DESCENDING)
+
+
+
 
         val option = FirestoreRecyclerOptions.Builder<Dosen>()
             .setQuery(query, Dosen::class.java)
             .build()
 
+
         dosenAdapter = DosenAdapter(option)
 
         with(binding){
+            tvNoData.visibility = View.GONE
             rvDosen.layoutManager = LinearLayoutManager(activity)
             rvDosen.setHasFixedSize(true)
             rvDosen.adapter = dosenAdapter
         }
     }
+
+//    private fun eventChangeListener() {
+//        val calendar = Calendar.getInstance()
+//
+//        //get date test 2
+//        val simpleDateFormat1 = SimpleDateFormat("EEEE, D MMMM yyyy")
+////        val simpleDateFormat1 = SimpleDateFormat("MMMM D, yyyy")
+//        val dateTime1 = simpleDateFormat1.format(calendar.time).toString()
+//        Log.d("date2", dateTime1)
+//
+//
+//        val db = FirebaseFirestore.getInstance()
+//        val collection = db.collection("presensiIlhamTest")
+//        val query = collection
+//            .whereEqualTo("date", dateTime1)
+//            .orderBy("time", Query.Direction.DESCENDING)
+//            .addSnapshotListener { snapshot, e ->
+//                if (e != null) {
+//                    Log.w("firebase firestore graph", "Listen failed.", e)
+//                    return@addSnapshotListener
+//                }
+//
+//                if (snapshot != null) {
+//                    Log.d("firebase firestore graph", "Current data: ${snapshot.documents}")
+//                    dosenArrayList.add(snapshot.documentChanges)
+//                } else {
+//                    Log.d("firebase firestore graph", "Current data: null")
+//                }
+//            }
+//
+//
+//
+//
+//
+//        dosenAdapter = DosenAdapter()
+//        dosenArrayList = arrayListOf()
+//
+//        with(binding){
+//            rvDosen.layoutManager = LinearLayoutManager(activity)
+//            rvDosen.setHasFixedSize(true)
+//            rvDosen.adapter = dosenAdapter
+//        }
+//    }
 
 
     //pagination
@@ -325,7 +409,7 @@ class DosenFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         dosenAdapter.startListening()
-        Log.d("firebase listener", "onStart")
+        Log.d("firebase firestore listener", "onStart")
     }
 
 //    override fun onStop() {
@@ -337,7 +421,7 @@ class DosenFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         dosenAdapter.stopListening()
-        Log.d("firebase listener", "onDestroyView")
+        Log.d("firebase firestore listener", "onDestroyView")
     }
 
 }
