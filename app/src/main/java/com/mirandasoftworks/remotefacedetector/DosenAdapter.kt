@@ -17,26 +17,12 @@ import com.google.firebase.ktx.Firebase
 import com.mirandasoftworks.remotefacedetector.databinding.UserListBinding
 import com.mirandasoftworks.remotefacedetector.model.Alat
 import com.mirandasoftworks.remotefacedetector.model.Dosen
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 
 class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecyclerAdapter<Dosen, DosenAdapter.ListViewHolder>(
     options
 ) {
-
-//    private val listDosen = ArrayList<Dosen>()
-
-//    private lateinit var onItemClickCallback: OnItemClickCallback
-//
-//    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-//        this.onItemClickCallback = onItemClickCallback
-//    }
-
-//    fun setData(list: ArrayList<Dosen>){
-//        listDosen.clear()
-//        listDosen.addAll(list)
-//        notifyDataSetChanged()
-//    }
-
-
 
     inner class ListViewHolder(itemView: UserListBinding) : RecyclerView.ViewHolder(itemView.root) {
         private val binding = itemView
@@ -52,17 +38,15 @@ class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecycler
                 collection.get()
                     .addOnSuccessListener { document ->
                         try {
-                            if (document != null) {
-                                Log.d("rv", "DocumentSnapshot data: ${document.documents}")
-                                val a = document.toObjects(Alat::class.java)
-                                Log.d("rv", "DocumentSnapshot data a: $a")
-                                val b = a[0].lokasi
-                                Log.d("rv", "DocumentSnapshot data b: $b")
-                                tvLocation.text = b
+//                                Log.d("rv", "DocumentSnapshot data: ${document.documents}")
+//                                val a = document.toObjects(Alat::class.java)
+//                                Log.d("rv", "DocumentSnapshot data a: $a")
+//                                val b = a[0].lokasi
+//                                Log.d("rv", "DocumentSnapshot data b: $b")
+//                                tvLocation.text = b
 
-                            } else {
-                                Log.d("rv", "No such document")
-                            }
+                            val location = document.toObjects(Alat::class.java)[0].lokasi
+                            tvLocation.text = location
                         } catch (e: Exception){
                             Log.d("rv", "system error $e")
                         }
@@ -72,62 +56,26 @@ class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecycler
                         Log.d("rv", "get failed with ", exception)
                     }
 
-
-//                val db = FirebaseFirestore.getInstance()
-//                val collection = db.collection("alat")
-//                    .whereEqualTo("id", dosen.alat_id)
-//                collection.addSnapshotListener { snapshot, e ->
-//                    if (e != null) {
-//                        Log.w("rc", "Listen failed.", e)
-//                        return@addSnapshotListener
-//                    }
-//
-//                    if (snapshot != null) {
-//                        Log.d("rc", "Current data: ${snapshot.documents}")
-//                        for (snapshot in snapshot.documents){
-//
-//                        }
-//                    } else {
-//                        Log.d("rc", "Current data: null")
-//                    }
-//                }
-
-//                for (alatId in dosen.alat_id!!){
-//                    val db = FirebaseFirestore.getInstance()
-//                    val collection = db.collection("alat")
-//                        .whereEqualTo("id", dosen.alat_id)
-//                        collection.addSnapshotListener { snapshot, e ->
-//                        if (e != null) {
-//                            Log.w("rc", "Listen failed.", e)
-//                            return@addSnapshotListener
-//                        }
-//
-//                        if (snapshot != null) {
-//                            Log.d("rc", "Current data: ${snapshot.documents}")
-//                            tvLocation.text = alatId.toString()
-//                        } else {
-//                            Log.d("rc", "Current data: null")
-//                        }
-//                    }
-//                }
-
-
-
                 tvUsername.text = dosen.nama
-//                tvLocation.text = dosen.alat_id
-                tvTime.text = dosen.time
+
+                val simpleDateFormat = SimpleDateFormat("EEEE, dd LLLL yyyy")
+                val date = simpleDateFormat.format(dosen.datetime!!.toDate())
+                Log.d("rvTime", date)
+//                Log.d("rvTime", "get ss ${dosen.datetime}")
+//                val dateTime4 = Timestamp(dosen.datetime!!.toDate().time)
+//                Log.d("rvTime", "get succes $dateTime4")
+                tvDate.text = date
+
+                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
+                val time = simpleTimeFormat.format(dosen.datetime.toDate())
+                Log.d("rvTime", time)
+//                Log.d("rvTime", "get ss ${dosen.datetime}")
+//                val dateTime4 = Timestamp(dosen.datetime!!.toDate().time)
+//                Log.d("rvTime", "get succes $dateTime4")
+                tvTime.text = time
 
 
-//                tvLocation.text = user.location
-//                tvTime.text = user.time
-//                root.setOnClickListener {
-//                    onItemClickCallback.onItemClicked(dosen)
-//                    Toast.makeText(it.context, dosen.nama, Toast.LENGTH_SHORT).show()
-//
-//                        //uses snackbar recomended uses coordinator layoit or anchor view
-//                    dosen.nama?.let { it1 -> Snackbar.make(it, it1, Snackbar.LENGTH_SHORT).setAction("Action", null).show() }
-//
-//                }
+
             }
         }
     }

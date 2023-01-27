@@ -10,11 +10,12 @@ data class Dosen(
 //    val company : String
 
 
-    val nama: String? = "",
-    val lokasi: String? = "",
-    val date: String? = "",
-    val time: String? = "",
-    val alat_id: String? = ""
+    val nama: String? = null,
+    val lokasi: String? = null,
+    val date: String? = null,
+    val time: String? = null,
+    val alat_id: String? = null,
+    val datetime: Timestamp? = null
 )
 
 

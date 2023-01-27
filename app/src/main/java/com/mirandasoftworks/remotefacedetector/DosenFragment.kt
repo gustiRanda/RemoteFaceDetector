@@ -288,26 +288,34 @@ class DosenFragment : Fragment() {
         Log.d("date5", timeStamp.toString())
         //2023-01-25 11:20:33.885
 
-//        val zoneId: ZoneId = ZoneId.of("America/Sao_Paulo")
-//        var zdt: ZonedDateTime = ZonedDateTime.of(2015, 10, 18, 12, 0, 0, 0, zoneId)
-//        zdt = zdt.toLocalDate().atStartOfDay(zoneId)
-//        println(zdt) // 2015-10-18T01:00-02:00[America/Sao_Paulo]
+        val zoneId: ZoneId = ZoneId.of("America/Sao_Paulo")
+        var zdt: ZonedDateTime = ZonedDateTime.of(2015, 10, 18, 12, 0, 0, 0, zoneId)
+        zdt = zdt.toLocalDate().atStartOfDay(zoneId)
+        println(zdt) // 2015-10-18T01:00-02:00[America/Sao_Paulo]
 
-        val startOfDay = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val startOfDay1 = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val startOfDay = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).toInstant().toEpochMilli()
         val dateTime4 = Timestamp(startOfDay)
-        Log.d("date4", startOfDay.toString())
         Log.d("date4", dateTime4.toString())
+
+        val zoneId2: ZoneId = ZoneId.of("Asia/Jakarta")
+        val startOfDay2 = ZonedDateTime.of(2023, 1, 11, 0, 0, 0, 0, zoneId2).toInstant().toEpochMilli()
+        val aa = Timestamp(startOfDay2)
+        Log.d("date4aa", aa.toString())
+
 
 
         val db = FirebaseFirestore.getInstance()
         val collection = db.collection("presensi")
         val query = collection
+//            .whereGreaterThanOrEqualTo("datetime", dateTime4)
+//            .whereLessThanOrEqualTo("datetime", dateTime4)
+            .whereGreaterThanOrEqualTo("datetime", aa)
+            .whereLessThanOrEqualTo("datetime", dateTime4)
+//            .whereGreaterThanOrEqualTo("datetime", "2023-01-11 00:00:00.0")
+//            .whereLessThanOrEqualTo("datetime", "2023-01-25 00:00:00.0")
 
-            .whereGreaterThanOrEqualTo("datetime", dateTime4)
             .orderBy("datetime", Query.Direction.DESCENDING)
-
-
-
 
         val option = FirestoreRecyclerOptions.Builder<Dosen>()
             .setQuery(query, Dosen::class.java)

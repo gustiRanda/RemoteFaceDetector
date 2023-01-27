@@ -1,116 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/textview"
+        android:text="tangggal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/ln_detail_profile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+    <Button
 
-            <TextView
-                android:id="@+id/tv_detail_dosen_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="ni0rrr" />
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="pilih tangggal awal"
+        app:layout_constraintTop_toBottomOf="@id/textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-            <!--            <ImageView-->
-            <!--                android:id="@+id/iv_detail_dosen"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                tools:src="@tools:sample/avatars" />-->
+    <TextView
+        android:id="@+id/textview1"
+        android:text="tangggal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_detail_dosen"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:strokeWidth="10dp"
-                app:strokeColor="@color/white"
-                app:shapeAppearanceOverlay="@style/roundedImageView"
-                tools:src="@tools:sample/avatars"/>
+    <Button
 
-            <TextView
-                android:id="@+id/tv_detail_dosen_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                tools:text="Ilham Gusti Randa" />
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="pilih tangggal aakhir"
+        app:layout_constraintTop_toBottomOf="@id/textview1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        </LinearLayout>
+    <TextView
+        android:id="@+id/textview2"
+        android:text="jumlah"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button1" />
 
-        <LinearLayout
-            android:id="@+id/ln_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ln_detail_profile">
+    <Button
 
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="clip_horizontal"-->
-<!--                android:layout_margin="3dp"-->
-<!--                android:text="Riwayat Kehadiran :" />-->
-
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/rv_dosen"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:padding="10dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.0"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="1.0"-->
-<!--                tools:listitem="@layout/user_list" />-->
-
-
-            <!--            <include-->
-            <!--                layout="@layout/user_history_placeholder"/><include-->
-            <!--                layout="@layout/user_history_placeholder"/><include-->
-            <!--                layout="@layout/user_history_placeholder"/><include-->
-            <!--                layout="@layout/user_history_placeholder"/><include-->
-            <!--                layout="@layout/user_history_placeholder"/><include-->
-            <!--                layout="@layout/user_history_placeholder"/><include-->
-            <!--                layout="@layout/user_history_placeholder"/><include-->
-            <!--                layout="@layout/user_history_placeholder"/><include-->
-            <!--                layout="@layout/user_history_placeholder"/>-->
-
-
-        </LinearLayout>
-
-
-        <ProgressBar
-            android:id="@+id/rv_progress_bar"
-            style="?attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tampilkan data"
+        app:layout_constraintTop_toBottomOf="@id/textview2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
