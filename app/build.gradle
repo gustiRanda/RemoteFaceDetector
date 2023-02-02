@@ -58,4 +58,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    //grahp
+    implementation "com.androidplot:androidplot-core:1.5.10"
 }

@@ -182,6 +182,8 @@ class DosenFragment : Fragment() {
 
 
 
+
+
 //    private fun eventChangeListener() {
 //        val db = FirebaseFirestore.getInstance()
 //        db.collection("presensiIlhamTest")
@@ -256,79 +258,36 @@ class DosenFragment : Fragment() {
 
     private fun eventChangeListener() {
 
-        val calendar = Calendar.getInstance()
-        val currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.time)
-//        Toast.makeText(requireContext(), currentDate,Toast.LENGTH_SHORT).show()
-        Log.d("date", currentDate)
-
-
-
-
-
-//        val calendar1 = Calendar.getInstance()
-//        get date test 2
-        val simpleDateFormat = SimpleDateFormat("EEEE, dd LLLL yyyy KK:mm:ss aaa z")
-        val dateTime = simpleDateFormat.format(calendar.time).toString()
-        Log.d("date1", dateTime)
-
-
-        //get date test 2
-        val simpleDateFormat1 = SimpleDateFormat("MMMM D, yyyy")
-        var dateTime1 = simpleDateFormat1.format(calendar.time).toString()
-        Log.d("date2", dateTime1)
-
-        //get time test
-        val simpleTimeFormat = SimpleDateFormat("KK:mm:ss")
-        val time = simpleTimeFormat.format(calendar.time).toString()
-        Log.d("date3", time)
-
-        val currentTimeMillis = System.currentTimeMillis()
-
-        val timeStamp = Timestamp(currentTimeMillis)
-        Log.d("date5", timeStamp.toString())
-        //2023-01-25 11:20:33.885
-
-        val zoneId: ZoneId = ZoneId.of("America/Sao_Paulo")
-        var zdt: ZonedDateTime = ZonedDateTime.of(2015, 10, 18, 12, 0, 0, 0, zoneId)
-        zdt = zdt.toLocalDate().atStartOfDay(zoneId)
-        println(zdt) // 2015-10-18T01:00-02:00[America/Sao_Paulo]
-
-        val startOfDay1 = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val startOfDay = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).toInstant().toEpochMilli()
-        val dateTime4 = Timestamp(startOfDay)
-        Log.d("date4", dateTime4.toString())
+        val startOfDayTimestamp = Timestamp(startOfDay)
+        Log.d("timestamp", startOfDay.toString())
+        Log.d("timestamp", startOfDayTimestamp.toString())
 
-        val zoneId2: ZoneId = ZoneId.of("Asia/Jakarta")
-        val startOfDay2 = ZonedDateTime.of(2023, 1, 11, 0, 0, 0, 0, zoneId2).toInstant().toEpochMilli()
-        val aa = Timestamp(startOfDay2)
-        Log.d("date4aa", aa.toString())
 
+        val endOfDay = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).plusDays(1).toInstant().toEpochMilli()
+        val endOfDayTimestamp = Timestamp(endOfDay)
+        Log.d("timestamp", endOfDay.toString())
+        Log.d("timestamp", endOfDayTimestamp.toString())
 
 
         val db = FirebaseFirestore.getInstance()
         val collection = db.collection("presensi")
         val query = collection
-//            .whereGreaterThanOrEqualTo("datetime", dateTime4)
-//            .whereLessThanOrEqualTo("datetime", dateTime4)
-            .whereGreaterThanOrEqualTo("datetime", aa)
-            .whereLessThanOrEqualTo("datetime", dateTime4)
-//            .whereGreaterThanOrEqualTo("datetime", "2023-01-11 00:00:00.0")
-//            .whereLessThanOrEqualTo("datetime", "2023-01-25 00:00:00.0")
-
+            .whereGreaterThanOrEqualTo("datetime", startOfDayTimestamp)
+            .whereLessThan("datetime", endOfDayTimestamp)
             .orderBy("datetime", Query.Direction.DESCENDING)
 
         val option = FirestoreRecyclerOptions.Builder<Dosen>()
             .setQuery(query, Dosen::class.java)
             .build()
 
-
         dosenAdapter = DosenAdapter(option)
 
         with(binding){
-            tvNoData.visibility = View.GONE
-            rvDosen.layoutManager = LinearLayoutManager(activity)
-            rvDosen.setHasFixedSize(true)
-            rvDosen.adapter = dosenAdapter
+                tvNoData.visibility = View.GONE
+                rvDosen.layoutManager = LinearLayoutManager(activity)
+                rvDosen.setHasFixedSize(true)
+                rvDosen.adapter = dosenAdapter
         }
     }
 
@@ -417,19 +376,15 @@ class DosenFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         dosenAdapter.startListening()
-        Log.d("firebase firestore listener", "onStart")
+        Log.d("firebaseFirestoreListener", "onStart")
     }
 
-//    override fun onStop() {
-//        super.onStop()
-//        dosenAdapter.stopListening()
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         dosenAdapter.stopListening()
-        Log.d("firebase firestore listener", "onDestroyView")
+        Log.d("firebaseFirestoreListener", "onDestroyView")
     }
 
 }

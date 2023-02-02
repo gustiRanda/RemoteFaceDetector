@@ -29,8 +29,6 @@ class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecycler
 
         fun bind(dosen: Dosen) {
 
-
-
             with(binding){
                 val db = Firebase.firestore
                 val collection = db.collection("alat")
@@ -38,13 +36,6 @@ class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecycler
                 collection.get()
                     .addOnSuccessListener { document ->
                         try {
-//                                Log.d("rv", "DocumentSnapshot data: ${document.documents}")
-//                                val a = document.toObjects(Alat::class.java)
-//                                Log.d("rv", "DocumentSnapshot data a: $a")
-//                                val b = a[0].lokasi
-//                                Log.d("rv", "DocumentSnapshot data b: $b")
-//                                tvLocation.text = b
-
                             val location = document.toObjects(Alat::class.java)[0].lokasi
                             tvLocation.text = location
                         } catch (e: Exception){
@@ -61,21 +52,12 @@ class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecycler
                 val simpleDateFormat = SimpleDateFormat("EEEE, dd LLLL yyyy")
                 val date = simpleDateFormat.format(dosen.datetime!!.toDate())
                 Log.d("rvTime", date)
-//                Log.d("rvTime", "get ss ${dosen.datetime}")
-//                val dateTime4 = Timestamp(dosen.datetime!!.toDate().time)
-//                Log.d("rvTime", "get succes $dateTime4")
                 tvDate.text = date
 
                 val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
                 val time = simpleTimeFormat.format(dosen.datetime.toDate())
                 Log.d("rvTime", time)
-//                Log.d("rvTime", "get ss ${dosen.datetime}")
-//                val dateTime4 = Timestamp(dosen.datetime!!.toDate().time)
-//                Log.d("rvTime", "get succes $dateTime4")
                 tvTime.text = time
-
-
-
             }
         }
     }
@@ -83,16 +65,6 @@ class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecycler
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         return ListViewHolder(UserListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
-//
-//    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-//        holder.bind(listDosen[position])
-//    }
-//
-//    override fun getItemCount(): Int = listDosen.size
-
-//    interface OnItemClickCallback {
-//        fun onItemClicked(dosen: Dosen)
-//    }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int, model: Dosen) {
         holder.bind(model)
