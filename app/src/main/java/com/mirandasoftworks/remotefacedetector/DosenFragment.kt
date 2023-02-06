@@ -2,14 +2,16 @@ package com.mirandasoftworks.remotefacedetector
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.mirandasoftworks.remotefacedetector.databinding.FragmentDosenBinding
 import com.mirandasoftworks.remotefacedetector.model.Dosen
 import java.sql.Timestamp
@@ -24,13 +26,7 @@ class DosenFragment : Fragment() {
     private var _binding: FragmentDosenBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var dosenArrayList: ArrayList<Dosen>
-
-
     private lateinit var dosenAdapter: DosenAdapter
-    private lateinit var dosenViewModel: DosenViewModel
-
-    var klik = 0
 
 
     override fun onCreateView(
@@ -81,7 +77,6 @@ class DosenFragment : Fragment() {
 //
 ////        showLoading(true)
 //
-//        dosenArrayList = arrayListOf()
 //
 //
 //        binding.add.setOnClickListener {
@@ -154,6 +149,8 @@ class DosenFragment : Fragment() {
 //
 //            })
 
+        @Suppress("DEPRECATION")
+        setHasOptionsMenu(true)
 
         eventChangeListener()
 
@@ -289,6 +286,40 @@ class DosenFragment : Fragment() {
                 rvDosen.setHasFixedSize(true)
                 rvDosen.adapter = dosenAdapter
         }
+    }
+
+    /// need fix
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        @Suppress("DEPRECATION")
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.main_menu, menu)
+        val searchView = context?.let { SearchView(it) }
+        menu.findItem(R.id.menu_search).apply {
+            setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW or MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            actionView = searchView
+        }
+
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (newText.isNotEmpty()){
+                    Log.d("search", newText)
+                } else{
+//                    searchAdapter.clearData()
+                    binding.tvNoData.visibility = View.VISIBLE
+                }
+
+                return false
+            }
+
+        })
+
     }
 
 //    private fun eventChangeListener() {
