@@ -29,9 +29,11 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var searchAdapter: SearchAdapter
-    private var searchQuery: String? = null
 
     private lateinit var searchArrayList : ArrayList<Dosen>
+    private lateinit var searchArrayListFull : ArrayList<Dosen>
+
+    private var searchState = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,15 +44,32 @@ class SearchFragment : Fragment() {
         val root: View = binding.root
 
         searchArrayList = arrayListOf()
+        searchArrayListFull = arrayListOf()
 
         @Suppress("DEPRECATION")
         setHasOptionsMenu(true)
 
         eventChangeListener()
 
+        searchAdapter = SearchAdapter()
+
+        with(binding){
+            tvNoData.visibility = View.GONE
+            rvSearch.layoutManager = LinearLayoutManager(activity)
+            rvSearch.setHasFixedSize(true)
+            rvSearch.adapter = searchAdapter
+        }
+
+//        if (!searchState){
+//            eventChangeListener()
+//        } else{
+//            Log.d("timestamp", "Aaa")
+//        }
+
         return root
     }
     private fun eventChangeListener() {
+
 
         val startOfDay = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).toInstant().toEpochMilli()
         val startOfDayTimestamp = Timestamp(startOfDay)
@@ -64,8 +83,10 @@ class SearchFragment : Fragment() {
         Log.d("timestamp", endOfDayTimestamp.toString())
 
 
+
+
         val db = Firebase.firestore
-        db.collection("presensi")
+        val query = db.collection("presensi")
 
 //            .whereGreaterThanOrEqualTo("datetime", startOfDayTimestamp)
 //            .whereLessThan("datetime", endOfDayTimestamp)
@@ -73,29 +94,30 @@ class SearchFragment : Fragment() {
             .orderBy("datetime", Query.Direction.DESCENDING)
             .addSnapshotListener(object : EventListener<QuerySnapshot>{
                 override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                    searchArrayList.clear()
-                    for (document in value!!){
-                        searchArrayList.add(document.toObject(Dosen::class.java))
-                        searchAdapter.setData(searchArrayList)
-                        Log.d("arraySearch", document.toObject<Dosen>().toString())
-                        Log.d("arraySearchList", searchArrayList.toString())
+                    if (!searchState){
+                        searchArrayList.clear()
+                        for (document in value!!){
+                            searchArrayList.add(document.toObject(Dosen::class.java))
+                            searchAdapter.setData(searchArrayList)
+                            Log.d("arraySearch", document.toObject<Dosen>().toString())
+                            Log.d("arraySearchList", searchArrayList.toString())
+                        }
+                        searchAdapter.notifyDataSetChanged()
                     }
-                    searchAdapter.notifyDataSetChanged()
                 }
-
             })
-        Log.d("searchEvent", searchQuery.toString())
+//        if (searchState){
+//            Log.d("searchStateTrue", searchState.toString())
+//            Log.d("searchStateQueryRemove", searchState.toString())
+//            query.remove()
+//
+//        } else{
+//            Log.d("searchStateElse", searchState.toString())
+//        }
 
 
 
-        searchAdapter = SearchAdapter()
 
-        with(binding){
-            tvNoData.visibility = View.GONE
-            rvSearch.layoutManager = LinearLayoutManager(activity)
-            rvSearch.setHasFixedSize(true)
-            rvSearch.adapter = searchAdapter
-        }
     }
 
 
@@ -119,7 +141,17 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                searchAdapter.filter.filter(newText)
+                if (newText.isEmpty()){
+                    searchState = false
+                    Log.d("searchStateToFalse", searchState.toString())
+                    searchAdapter.setData(searchArrayList)
+                    eventChangeListener()
+                    Log.d("searchStateToFalse", searchArrayList.toString())
+                } else{
+                    searchState = true
+                    searchAdapter.filter.filter(newText)
+                    Log.d("searchStateToTrue", searchState.toString())
+                }
 
                 return false
             }
@@ -127,13 +159,6 @@ class SearchFragment : Fragment() {
         })
 
     }
-
-
-
-
-//    private fun searchUser(query: String){
-//        searchViewModel.setListSearch(query)
-//    }
 
     override fun onStart() {
         super.onStart()

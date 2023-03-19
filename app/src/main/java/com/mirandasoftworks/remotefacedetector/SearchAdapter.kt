@@ -28,6 +28,7 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.ListViewHolder>(), Fi
         this.listSearch = list
 //        this.listSearchFull = list
         listSearchFull = ArrayList(listSearch)
+        Log.d("searchTestListSearchFullInitiation", listSearchFull.toString())
 
 //        notifyDataSetChanged()
 
@@ -107,8 +108,9 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.ListViewHolder>(), Fi
 
                 val filteredList: ArrayList<Dosen> = ArrayList()
 
-                if (query == null || query.length == 0){
+                if (query == null || query.isEmpty()){
                     filteredList.addAll(listSearchFull)
+                    Log.d("searchTestNull", listSearchFull.toString())
 
                 } else{
                     val searchQuery = query.toString().toLowerCase().trim()
@@ -118,6 +120,7 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.ListViewHolder>(), Fi
                             filteredList.add(item)
                         }
                     }
+                    Log.d("searchTest", filteredList.toString())
                 }
 
                 val filterResults = FilterResults()
@@ -155,6 +158,7 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.ListViewHolder>(), Fi
                 listSearch.clear()
 
                 listSearch.addAll(filteredResult!!.values as ArrayList<Dosen>)
+                Log.d("searchTestPublish", listSearch.toString())
                 notifyDataSetChanged()
 
 //                exampleList.clear()

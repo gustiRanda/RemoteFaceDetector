@@ -12,7 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+
+
         <TextView
+            android:visibility="gone"
             android:id="@+id/textview"
             android:text="tangggal"
             android:layout_width="wrap_content"
@@ -22,16 +26,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-
+            android:visibility="visible"
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="pilih tangggal awal"
+            android:text="Pilih Bulan"
             app:layout_constraintTop_toBottomOf="@id/textview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/textview1"
             android:text="tangggal"
             android:layout_width="wrap_content"
@@ -41,7 +46,7 @@
             app:layout_constraintTop_toBottomOf="@id/button" />
 
         <Button
-
+            android:visibility="gone"
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,6 +56,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/textview2"
             android:text="jumlah"
             android:layout_width="wrap_content"
@@ -60,7 +66,7 @@
             app:layout_constraintTop_toBottomOf="@id/button1" />
 
         <Button
-
+            android:visibility="gone"
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,20 +77,74 @@
 
         <TextView
             android:id="@+id/textview3"
-            android:text="kehadiran hari ini"
+            android:text="total kehadiran dosen bulan ini"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button2" />
+
         <TextView
-            android:id="@+id/textview4"
-            android:text="kehadiran bulan ini"
+            android:id="@+id/textview6"
+            android:text="total kehadiran mahasiswa bulan ini"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textview3" />
+        <TextView
+            android:id="@+id/textview4"
+            android:text="total kehadiran bulan ini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview6" />
+
+        <TextView
+            android:id="@+id/textview5"
+            android:text="kehadiran anda bulan ini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview4" />
+
+        <TextView
+            android:id="@+id/textview7"
+            android:text="total kehadiran bulan pilihan "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview5" />
+
+        <TextView
+            android:id="@+id/textview8"
+            android:text="kehadiran dosen bulan pilihan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview7" />
+
+        <TextView
+            android:id="@+id/textview9"
+            android:text="kehadiran mahasiswa bulan pilihan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview8" />
+
+
 
 
 

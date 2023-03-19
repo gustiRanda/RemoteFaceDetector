@@ -61,4 +61,12 @@ dependencies {
 
     //grahp
     implementation "com.androidplot:androidplot-core:1.5.10"
+
+
+    //cant import monht picker dialog
+//    implementation 'com.whiteelephant:monthandyearpicker:1.3.0'
+
+
+//force close
+//    implementation 'io.github.dzmitry-lakisau:month-year-picker-dialog:1.0.0'
 }
