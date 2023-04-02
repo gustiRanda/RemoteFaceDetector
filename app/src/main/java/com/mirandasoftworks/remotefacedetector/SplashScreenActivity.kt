@@ -15,12 +15,29 @@ class SplashScreenActivity : AppCompatActivity() {
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         binding.ivSplashScreen.alpha = 0f
         binding.ivSplashScreen.animate().setDuration(1500).alpha(1f).withEndAction{
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
-            finish()
+            if (getSharedPreferences("PREFERENCES", MODE_PRIVATE).getBoolean("loginState", true)){
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+                finish()
+            } else{
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+                finish()
+            }
+
         }
+
+//        binding.ivSplashScreen.alpha = 0f
+//        binding.ivSplashScreen.animate().setDuration(1500).alpha(1f).withEndAction{
+//            val intent = Intent(this, LoginActivity::class.java)
+//            startActivity(intent)
+//            overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+//            finish()
+//        }
     }
 }

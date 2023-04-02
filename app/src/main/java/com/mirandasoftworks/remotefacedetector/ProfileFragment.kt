@@ -1,6 +1,8 @@
 package com.mirandasoftworks.remotefacedetector
 
-import android.graphics.Color
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,9 +15,6 @@ import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mirandasoftworks.remotefacedetector.databinding.FragmentProfileBinding
 import java.sql.Timestamp
-import java.text.FieldPosition
-import java.text.Format
-import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -164,8 +163,30 @@ class ProfileFragment : Fragment() {
 //                .setMonthRange(Calendar.JANUARY, Calendar.DECEMBER)
 //        }
 
+        val sharedPreferences = this.requireActivity().getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE)
+        if (sharedPreferences.getString("accountType", "") == "non pejabat mahasiswa"){
+            with(binding){
+                button.visibility = View.GONE
+                textview3.visibility = View.GONE
+                textview8.visibility = View.GONE
+            }
+        } else{
+            with(binding){
+                button.visibility = View.VISIBLE
+                textview3.visibility = View.VISIBLE
+                textview8.visibility = View.VISIBLE
+            }
+        }
+
         binding.button.setOnClickListener {
             getMonthlySummaryData()
+        }
+
+        binding.btnLogout.setOnClickListener {
+            sharedPreferences.edit().putBoolean("loginState", false).apply()
+            val intent = Intent(this.requireActivity(), LoginActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
@@ -173,6 +194,8 @@ class ProfileFragment : Fragment() {
             getSummaryDataOfCurrentUser()
             binding.swipeRefreshLayout.isRefreshing = false
         }
+
+
 
         getSummaryData()
         getSummaryDataOfCurrentUser()
@@ -221,15 +244,15 @@ class ProfileFragment : Fragment() {
                 query.addSnapshotListener { snapshot, e ->
                     try {
                         if (e != null) {
-                            Log.w("firebaseFirestoreProfile", "Listen failed.", e)
+                            Log.w("firebaseFirestoreProfile", "Listen failed snapshot1.", e)
                             return@addSnapshotListener
                         }
 
                         if (snapshot != null) {
                             list.clear()
                             set.clear()
-                            Log.d("firebaseFirestoreProfile", "Current data full: ${snapshot.documents}")
-                            Log.d("firebaseFirestoreProfile", "Current data full: ${snapshot.documents[0]}")
+                            Log.d("firebaseFirestoreProfile", "Current data full snapshot1: ${snapshot.documents}")
+                            Log.d("firebaseFirestoreProfile", "Current data full snapshot1: ${snapshot.documents[0]}")
                             for (i in snapshot.documents.indices){
                                 val dd = snapshot.documents[i]
                                 val aa = snapshot.documents[i].get("datetime")
@@ -280,11 +303,12 @@ class ProfileFragment : Fragment() {
 
 
                         } else {
-                            Log.d("firebaseFirestoreProfile", "Current data: null")
+                            Log.d("firebaseFirestoreProfile", "Current data: null ")
                         }
                     } catch (e: Exception){
                         Log.d("firebaseFirestoreProfile", "system error $e")
-                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
+                        // null not attached to a context.
+//                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -297,7 +321,7 @@ class ProfileFragment : Fragment() {
                 query1.addSnapshotListener { snapshot, e ->
                     try {
                         if (e != null) {
-                            Log.w("firebaseFirestoreProfile", "Listen failed.", e)
+                            Log.w("firebaseFirestoreProfile", "Listen failed snapshot2.", e)
                             return@addSnapshotListener
                         }
 
@@ -347,7 +371,8 @@ class ProfileFragment : Fragment() {
                         }
                     } catch (e: Exception){
                         Log.d("firebaseFirestoreProfile", "system error $e")
-                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
+                        // null not attached to a context.
+//                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -360,7 +385,7 @@ class ProfileFragment : Fragment() {
                 query2.addSnapshotListener { snapshot, e ->
                     try {
                         if (e != null) {
-                            Log.w("firebaseFirestoreProfile", "Listen failed.", e)
+                            Log.w("firebaseFirestoreProfile", "Listen failed snapshot2.", e)
                             return@addSnapshotListener
                         }
 
@@ -410,7 +435,8 @@ class ProfileFragment : Fragment() {
                         }
                     } catch (e: Exception){
                         Log.d("firebaseFirestoreProfile", "system error $e")
-                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
+                        // null not attached to a context.
+//                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
                     }
 
                 }
