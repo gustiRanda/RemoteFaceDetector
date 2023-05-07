@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".Camera">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_layout_username"
+        android:id="@+id/text_input_layout_room_name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:hint="NIP/NIM"
+        android:hint="Nama Ruangan"
         app:endIconMode="clear_text"
         app:startIconDrawable="@drawable/ic_username"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,36 +22,36 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_input_edit_text_username"
+            android:id="@+id/text_input_edit_text_room_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"/>
+            android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_layout_password"
+        android:id="@+id/text_input_layout_ip_address"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:hint="Password"
-        app:endIconMode="password_toggle"
+        android:hint="Alamat IP"
+        app:endIconMode="clear_text"
         app:startIconDrawable="@drawable/ic_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_input_layout_username">
+        app:layout_constraintTop_toBottomOf="@id/text_input_layout_room_name">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_input_edit_text_password"
+            android:id="@+id/text_input_edit_text_ip_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"/>
+            android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_add_camera_module"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -59,20 +59,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_input_layout_password"
-        android:text="Login"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_loginn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_login"
-        android:text="Skip Login"/>
-
+        app:layout_constraintTop_toBottomOf="@id/text_input_layout_ip_address"
+        android:text="Tambah Modul Kamera"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

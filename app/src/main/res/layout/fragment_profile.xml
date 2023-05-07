@@ -12,97 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/textview"
-            android:text="tangggal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <Button
             android:visibility="visible"
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pilih Bulan"
-            app:layout_constraintTop_toBottomOf="@id/textview"
+            android:text="Pilih Bulan rekap semua"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/textview1"
-            android:text="tangggal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button" />
-
         <Button
-            android:visibility="gone"
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="pilih tangggal aakhir"
-            app:layout_constraintTop_toBottomOf="@id/textview1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/textview2"
-            android:text="jumlah"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button1" />
-
-        <Button
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="tampilkan data"
-            app:layout_constraintTop_toBottomOf="@id/textview2"
+            android:text="Pilih Bulan rekap saya"
+            app:layout_constraintTop_toBottomOf="@id/button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/textview3"
-            android:text="total kehadiran dosen bulan ini"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button2" />
-
-        <TextView
-            android:id="@+id/textview6"
-            android:text="total kehadiran mahasiswa bulan ini"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textview3" />
-        <TextView
-            android:id="@+id/textview4"
-            android:text="total kehadiran bulan ini"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textview6" />
 
         <TextView
             android:id="@+id/textview5"
@@ -112,7 +41,17 @@
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textview4" />
+            app:layout_constraintTop_toBottomOf="@id/button2" />
+
+        <TextView
+            android:id="@+id/textview6"
+            android:text="kehadiran anda bulan pilihan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview5" />
 
         <TextView
             android:id="@+id/textview7"
@@ -122,7 +61,7 @@
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textview5" />
+            app:layout_constraintTop_toBottomOf="@id/textview6" />
 
         <TextView
             android:id="@+id/textview8"
@@ -144,6 +83,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textview8" />
 
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Tambah Modul Kamera"
+            android:layout_marginHorizontal="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview9"/>
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Buat Akun"
+            android:layout_marginHorizontal="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button3"/>
+
         <Button
             android:id="@+id/btn_logout"
             android:layout_width="0dp"
@@ -155,23 +115,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-
-
-
-
-
-        <com.androidplot.xy.XYPlot
-            android:visibility="gone"
-            android:id="@+id/xy_plot"
-            style="@style/APDefacto.Light"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button2"
-            app:domainTitle="Tanggal"
-            app:rangeTitle="Jumlah Hadir"
-            app:title="Rekap Data Kehadiran" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

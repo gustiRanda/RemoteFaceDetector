@@ -10,6 +10,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.mirandasoftworks.remotefacedetector.databinding.ActivityLoginBinding
 import com.mirandasoftworks.remotefacedetector.model.Dosen
+import java.security.MessageDigest
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -77,22 +78,22 @@ class LoginActivity : AppCompatActivity() {
             finishAffinity()
         }
 
-                    with(binding){
-                btnLogin.setOnClickListener {
-                    val username = textInputEditTextUsername.text.toString()
-                    val password = textInputEditTextPassword.text.toString()
+        with(binding){
+            btnLogin.setOnClickListener {
+                val username = textInputEditTextUsername.text.toString()
+                val password = textInputEditTextPassword.text.toString()
 
-                    if (username.isEmpty()){
-                        textInputEditTextUsername.error = "Silakan Isi NIP/NIM Anda"
-                        textInputEditTextUsername.requestFocus()
-                    } else if (password.isEmpty()){
-                        textInputEditTextPassword.error = "Silakan Isi Password Anda"
-                        textInputEditTextPassword.requestFocus()
-                    } else{
-                        pushLogin(username, password)
-                    }
+                if (username.isEmpty()){
+                    textInputEditTextUsername.error = "Silakan Isi NIP/NIM Anda"
+                    textInputEditTextUsername.requestFocus()
+                } else if (password.isEmpty()){
+                    textInputEditTextPassword.error = "Silakan Isi Password Anda"
+                    textInputEditTextPassword.requestFocus()
+                } else{
+                    pushLogin(username, password)
                 }
             }
+        }
 
 
     }
@@ -121,6 +122,14 @@ class LoginActivity : AppCompatActivity() {
 //            }
 //        }
 
+
+        val initialPassword = password.toByteArray()
+        Log.d("password", "password = $password")
+        val messageDigest = MessageDigest.getInstance("SHA-256")
+        val bytes = messageDigest.digest(initialPassword)
+        val finalPassword = Base64.getEncoder().encodeToString(bytes)
+        Log.d("password", "password = $finalPassword")
+
         val db = Firebase.firestore
         val query = db.collection("akun").document(username)
         query.get()
@@ -135,13 +144,13 @@ class LoginActivity : AppCompatActivity() {
 
                     query.get()
                         .addOnSuccessListener { snapshot1 ->
-                            if (password == snapshot1.get("password")){
+                            if (finalPassword == snapshot1.get("password")){
                                 Log.d("loginUsernamePassword", "Password ${snapshot1["password"]} Anda Benar")
-                                Log.d("loginUsernamePassword", "Password $password Anda Benar")
+                                Log.d("loginUsernamePassword", "Password $finalPassword Anda Benar")
 
                                 getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putBoolean("loginState", true).apply()
                                 getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putString("accountType", "${snapshot.get("tipe_akun")}").apply()
-//                                getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putBoolean("loginState", true).apply()
+                                getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putString("name", "${snapshot.get("nama")}").apply()
 
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
@@ -149,14 +158,14 @@ class LoginActivity : AppCompatActivity() {
                                 finishAffinity()
                             } else{
                                 Log.d("loginUsernamePassword", "Password ${snapshot1["password"]} Anda Salah")
-                                Log.d("loginUsernamePassword", "Password $password Anda Salah")
+                                Log.d("loginUsernamePassword", "Password $finalPassword Anda Salah")
                                 Toast.makeText(this, "Password Yang Anda Masukkan Salah",Toast.LENGTH_SHORT).show()
                             }
                         }
                 } else{
-                    Log.d("loginUsername", "Username ${snapshot["nim_nip"]} tidak ditemukan")
-                    Log.d("loginUsername", "Username $username tidak ditemukan")
-                    Toast.makeText(this, "NIM/NIP Anda Tidak Ditemukan",Toast.LENGTH_SHORT).show()
+                    Log.d("loginUsername", "Username ${snapshot["nim_nip"]} tidak Terdaftar")
+                    Log.d("loginUsername", "Username $username tidak Terdaftar")
+                    Toast.makeText(this, "NIM/NIP Anda Tidak Terdaftar",Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->

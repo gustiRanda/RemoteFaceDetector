@@ -1,17 +1,11 @@
 package com.mirandasoftworks.remotefacedetector
 
-import android.app.SearchManager
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -32,6 +26,7 @@ class SearchFragment : Fragment() {
 
     private lateinit var searchArrayList : ArrayList<Dosen>
     private lateinit var searchArrayListFull : ArrayList<Dosen>
+    private lateinit var searchArrayListFullTemp : ArrayList<Dosen>
 
     private var searchState = false
 
@@ -45,6 +40,7 @@ class SearchFragment : Fragment() {
 
         searchArrayList = arrayListOf()
         searchArrayListFull = arrayListOf()
+        searchArrayListFullTemp = arrayListOf()
 
         @Suppress("DEPRECATION")
         setHasOptionsMenu(true)
@@ -86,7 +82,8 @@ class SearchFragment : Fragment() {
 
 
         val db = Firebase.firestore
-        val query = db.collection("presensi")
+        db.collection("presensi")
+//            .whereEqualTo("pekerjaan", "dosen")
 
 //            .whereGreaterThanOrEqualTo("datetime", startOfDayTimestamp)
 //            .whereLessThan("datetime", endOfDayTimestamp)
@@ -100,12 +97,81 @@ class SearchFragment : Fragment() {
                             searchArrayList.add(document.toObject(Dosen::class.java))
                             searchAdapter.setData(searchArrayList)
                             Log.d("arraySearch", document.toObject<Dosen>().toString())
+                            Log.d("arraySearch", document.get("nama").toString())
                             Log.d("arraySearchList", searchArrayList.toString())
+                            /***
+                            D/arraySearchList: [Dosen(nama=Yosua Alvin, lokasi=null, date=null, time=null, alat_id=f4:7b:09:0d:c3:20, datetime=Timestamp(seconds=1681277366,
+                            nanoseconds=92067000), tipe_akun=null)]
+                            ***/
+
+
+//                            db.collection("akun")
+//                                .whereEqualTo("nama", document.get("nama").toString())
+//                                .addSnapshotListener(object : EventListener<QuerySnapshot>{
+//                                    override fun onEvent(
+//                                        value: QuerySnapshot?,
+//                                        error: FirebaseFirestoreException?
+//                                    ) {
+//                                        for (documents in value!!){
+//                                            Log.d("arraySearchh", documents.toString())
+//                                            Log.d("arraySearchh", documents.toObject<Dosen>().toString())
+//                                            /***
+//                                            Dosen(nama=Raden, lokasi=null, date=null, time=null, alat_id=null, datetime=null, tipe_akun=mahasiswa)
+//                                             ***/
+//
+//                                            Log.d("arraySearchh", documents.get("tipe_akun").toString())
+//
+//                                            if (documents.get("tipe_akun").toString() == "mahasiswa"){
+//
+//                                                val int = searchArrayListFullTemp.indexOf(Dosen(nama = "Ilham"))
+//                                                Log.d("arraySearchh", int.toString())
+//                                                searchArrayListFullTemp.add(documents.toObject(Dosen::class.java))
+////                                                val map = searchArrayListFullTemp.associateBy { it.nama }
+////                                                Log.d("arraySearchListtMap",
+////                                                    map.toString()
+////                                                )
+////                                                /***
+////                                                Ilham Gusti=Dosen(nama=Ilham Gusti, lokasi=null, date=null, time=null, alat_id=null, datetime=null, tipe_akun=mahasiswa
+////                                                 ***/
+////                                                val map2 = searchArrayListFullTemp.groupBy { it.nama }
+////                                                Log.d("arraySearchListtMapp",
+////                                                    map2.toString()
+////                                                )
+////                                                /***
+////                                                Ilham Gusti=[Dosen(nama=Ilham Gusti, lokasi=null, date=null, time=null, alat_id=null, datetime=null, tipe_akun=mahasiswa)]
+////                                                 ***/
+//                                                Log.d("arraySearchListt",
+//                                                    searchArrayListFullTemp.toString()
+//                                                )
+//                                                Log.d("arraySearchListt",
+//                                                    searchArrayListFullTemp[0].tipe_akun.toString()
+//                                                )
+////                                                Log.d("arraySearchListt",
+////                                                    searchArrayListFullTemp
+////                                                )
+//
+////                                                val set: MutableSet<Dosen> = LinkedHashSet(searchArrayList)
+////                                                set.addAll(searchArrayListFullTemp)
+////                                                val list3 = ArrayList(set)
+////                                                Log.d("arraySearchListtt", list3.toString())
+////                                                /***
+////                                                Dosen(nama=Raden, lokasi=null, date=null, time=null, alat_id=08:f8:bc:60:02:2f, datetime=Timestamp(seconds=1675754316, nanoseconds=492000000), tipe_akun=null),
+////                                                Dosen(nama=Ilham Gusti, lokasi=null, date=null, time=null, alat_id=null, datetime=null, tipe_akun=mahasiswa)
+////                                                 ***/
+//                                            }
+//                                        }
+//
+//                                    }
+//
+//                                })
+
                         }
                         searchAdapter.notifyDataSetChanged()
                     }
                 }
             })
+
+
 //        if (searchState){
 //            Log.d("searchStateTrue", searchState.toString())
 //            Log.d("searchStateQueryRemove", searchState.toString())

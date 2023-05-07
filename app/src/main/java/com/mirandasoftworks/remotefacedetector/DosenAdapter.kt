@@ -1,5 +1,6 @@
 package com.mirandasoftworks.remotefacedetector
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -27,7 +28,9 @@ class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecycler
     inner class ListViewHolder(itemView: UserListBinding) : RecyclerView.ViewHolder(itemView.root) {
         private val binding = itemView
 
+
         fun bind(dosen: Dosen) {
+
 
             with(binding){
                 val db = Firebase.firestore
@@ -59,6 +62,10 @@ class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecycler
                 Log.d("rvTime", time)
                 tvTime.text = time
             }
+//            if (dosen.nama.equals("Ilham Gusti")){
+//                binding.clUserList.setBackgroundColor(Color.parseColor("#567845"))
+//                binding.llUserList.setBackgroundColor(Color.parseColor("#567845"))
+//            }
         }
     }
 
@@ -68,5 +75,16 @@ class DosenAdapter(options: FirestoreRecyclerOptions<Dosen>) : FirestoreRecycler
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int, model: Dosen) {
         holder.bind(model)
+//        if (model.nama.equals("Ilham Gusti")){
+//            holder.bind(model)
+//            holder.itemView.rootView.setBackgroundColor(Color.GREEN)
+//        }
+//        if (position %2 == 1){
+//            holder.itemView.resources.getColor(R.color.purple_500)
+//            holder.itemView.rootView.setBackgroundColor(Color.GRAY)
+//        } else{
+//
+//            holder.itemView.resources.getColor(R.color.purple_700)
+//        }
     }
 }

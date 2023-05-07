@@ -1,10 +1,12 @@
 package com.mirandasoftworks.remotefacedetector
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -20,14 +22,61 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.ListViewHolder>(), Fi
 
     private var listSearch = ArrayList<Dosen>()
     private var listSearchFull = ArrayList<Dosen>()
+    private var listSearchFull2 = ArrayList<Dosen>()
 
     fun setData(list: ArrayList<Dosen>){
-//        listSearch.clear()
-//        listSearch.addAll(list)
-//        notifyDataSetChanged()
+
+//        if (list.contains(Dosen("","","","","","","pejabat"))){
+//            Log.d("searchTestListSearchFullInitiation", list.toString())
+//
+//            this.listSearch = list
+//            listSearchFull = ArrayList(listSearch)
+//        }
+
+//        if (list.any{ it.equals("pejabat")}){
+//            Log.d("searchTestListSearchFullInitiation", list.toString())
+//            list.filter { it.tipe_akun.equals("pejabat")}
+//            this.listSearch = list
+//            listSearchFull = ArrayList(listSearch)
+//        }
+
+//        if (list.filter { it.tipe_akun!!.contains("pejabat")}){
+//            Log.d("searchTestListSearchFullInitiation", list.toString())
+//            this.listSearch = list
+//            listSearchFull = ArrayList(listSearch)
+//        }
+
+//        if (list.filter { it.tipe_akun.equals("pejabat")}){
+//            Log.d("searchTestListSearchFullInitiation", list.toString())
+//            this.listSearch = list
+//            listSearchFull = ArrayList(listSearch)
+//        }
+
+
+        //work
+
+//        val listFiltered = list.filter { it.tipe_akun.equals("pejabat")}
+//        this.listSearch = listFiltered as ArrayList<Dosen>
+//        listSearchFull = ArrayList(listSearch)
+
+
+
+//        this.listSearch = list
+//
+//        listSearchFull2 = ArrayList(listSearch)
+//        listSearchFull2.removeAt(0)
+//        listSearchFull = ArrayList(listSearchFull2)
+
+//
+//          work
+
         this.listSearch = list
-//        this.listSearchFull = list
         listSearchFull = ArrayList(listSearch)
+
+
+
+        Log.d("searchTestListSearchFullInitiationFilter", list.filter { it.tipe_akun.equals("pejabat")}.toString())
+        Log.d("searchTestListSearchFullInitiationAny", list.any{ it.equals("pejabat")}.toString())
         Log.d("searchTestListSearchFullInitiation", listSearchFull.toString())
 
 //        notifyDataSetChanged()
@@ -57,8 +106,8 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.ListViewHolder>(), Fi
     inner class ListViewHolder(itemView: UserListBinding) : RecyclerView.ViewHolder(itemView.root) {
         private val binding = itemView
 
+        @SuppressLint("ResourceAsColor")
         fun bind(dosen: Dosen) {
-
             with(binding){
                 val db = Firebase.firestore
                 val collection = db.collection("alat")
@@ -67,6 +116,9 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.ListViewHolder>(), Fi
                     .addOnSuccessListener { document ->
                         try {
                             val location = document.toObjects(Alat::class.java)[0].lokasi
+                            Log.d("location","${document.toObjects(Alat::class.java)}")
+                            Log.d("location","${document.toObjects(Alat::class.java)[0]}")
+                            Log.d("location","${document.toObjects(Alat::class.java)[0].lokasi}")
                             tvLocation.text = location
                         } catch (e: Exception){
                             Log.d("rv", "system error $e")
@@ -77,6 +129,28 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.ListViewHolder>(), Fi
                         Log.d("rv", "get failed with ", exception)
                     }
 
+//                val collection2 = db.collection("akun")
+//                    .whereEqualTo("nama", dosen.nama)
+//                collection2.get()
+//                    .addOnSuccessListener { document ->
+//                        try {
+//                            val tipeAkun = document.toObjects(Dosen::class.java)[0].tipe_akun
+//                            Log.d("locationAA","${document.toObjects(Dosen::class.java)}")
+//                            Log.d("locationAA","${document.toObjects(Dosen::class.java)[0]}")
+//                            Log.d("locationAA","${document.toObjects(Dosen::class.java)[0].tipe_akun}")
+//                            if (tipeAkun == "mahasiswa"){
+//                                binding.clUserList.setBackgroundColor(R.color.blue_sky)
+////                                listSearch.remove(document.toObjects(Dosen::class.java)[0].nama)
+//                            }
+//                        } catch (e: Exception){
+//                            Log.d("rv", "system error $e")
+//                        }
+//
+//                    }
+//                    .addOnFailureListener { exception ->
+//                        Log.d("rv", "get failed with ", exception)
+//                    }
+
                 tvUsername.text = dosen.nama
 
                 val simpleDateFormat = SimpleDateFormat("EEEE, dd LLLL yyyy")
@@ -84,10 +158,73 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.ListViewHolder>(), Fi
                 Log.d("rvTime", date)
                 tvDate.text = date
 
-                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
+                val simpleTimeFormat = SimpleDateFormat("hh:mm:ss aaa")
                 val time = simpleTimeFormat.format(dosen.datetime.toDate())
                 Log.d("rvTime", time)
                 tvTime.text = time
+
+
+//                listSearch.remove(dosen.takeIf {
+//                    dosen.tipe_akun.equals("pejabat")
+//                })
+//                when {
+//                    dosen.pekerjaan.equals("dosen") -> {
+//                        binding.clUserList.setBackgroundColor(R.color.purple_700)
+//                    }
+//                    dosen.pekerjaan.equals("tendik") -> {
+//                        binding.clUserList.setBackgroundColor(R.color.teal_200)
+//                    }
+//                    dosen.pekerjaan.equals("mahasiswa") -> {
+//                        binding.clUserList.setBackgroundColor(R.color.blue_sky)
+//                    }
+//                }
+//                when {
+//                    dosen.pekerjaan.equals("dosen") -> {
+//                        binding.llUserList.setBackgroundColor(
+//                            ContextCompat.getColor(
+//                                itemView.context,
+//                                R.color.teal_700
+//                            ))
+//                    }
+//                    dosen.pekerjaan.equals("mahasiswa") -> {
+//                        binding.llUserList.setBackgroundColor(
+//                            ContextCompat.getColor(
+//                                root.context,
+//                                R.color.blue_sky
+//                            ))
+//                    }
+//                    else -> {
+//                        binding.llUserList.setBackgroundColor(
+//                            ContextCompat.getColor(
+//                                itemView.context,
+//                                R.color.white
+//                            ))
+//                    }
+//                }
+
+                when {
+                    dosen.jenis_pekerjaan.equals("dosen") -> {
+                        binding.llUserList.setBackgroundColor(
+                            ContextCompat.getColor(
+                                root.context,
+                                R.color.teal_700
+                            ))
+                    }
+                    dosen.jenis_pekerjaan.equals("mahasiswa") -> {
+                        binding.llUserList.setBackgroundColor(
+                            ContextCompat.getColor(
+                                root.context,
+                                R.color.blue_sky
+                            ))
+                    }
+                    else -> {
+                        binding.llUserList.setBackgroundColor(
+                            ContextCompat.getColor(
+                                root.context,
+                                R.color.white
+                            ))
+                    }
+                }
             }
         }
     }
