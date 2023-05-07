@@ -22,6 +22,29 @@ class CreateAccountActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         with(binding){
+//            btnCreateAccount.setOnClickListener {
+//                val name = textInputEditTextUsername.text.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
+////                val sentence = "Welcome to Kotlin!"
+////                val words = sentence.split(' ');
+////                println(words.joinToString(separator = "_") { word -> word.replaceFirstChar { it.lowercase() } })
+//                val nimNIP = textInputEditTextNipNim.text.toString()
+//
+//                if (name.isEmpty()){
+//                    textInputEditTextUsername.error = "Silakan Isi Nama"
+//                    textInputEditTextUsername.requestFocus()
+//                } else if (nimNIP.isEmpty()){
+//                    textInputEditTextNipNim.error = "Silakan Isi NIM/NIP"
+//                    textInputEditTextNipNim.requestFocus()
+//                } else if (radioGroup.checkedRadioButtonId == -1){
+//                    Toast.makeText(this@CreateAccountActivity, "Pilih Jenis Akun", Toast.LENGTH_SHORT).show()
+//                }
+//                else{
+//                    val radio:RadioButton = findViewById(radioGroup.checkedRadioButtonId)
+//
+//                    addAccount(name, nimNIP, radio.text.toString().lowercase())
+//                }
+//            }
+
             btnCreateAccount.setOnClickListener {
                 val name = textInputEditTextUsername.text.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
 //                val sentence = "Welcome to Kotlin!"
