@@ -4,16 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashScreenActivity">
+    tools:context=".AttendanceFragment"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/iv_splash_screen"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/img_splash"/>
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/person_list" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

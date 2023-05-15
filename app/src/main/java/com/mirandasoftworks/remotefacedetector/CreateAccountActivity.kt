@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
@@ -20,6 +22,20 @@ class CreateAccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.title = "Buat Akun"
+
+
+//        val list0 = listOf("Mahasiswa", "Tendik", "Dosen")
+//        val list1 = listOf("Mahasiswa", "Dosen", "Pejabat", "Admin")
+//
+//        val adapter0 = ArrayAdapter<String>(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, list0)
+//        binding.sp0.adapter = adapter0
+//
+//        val adapter1 = ArrayAdapter<String>(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, list1)
+//        binding.sp1.adapter = adapter1
+
+
 
         with(binding){
 //            btnCreateAccount.setOnClickListener {
@@ -45,6 +61,29 @@ class CreateAccountActivity : AppCompatActivity() {
 //                }
 //            }
 
+//            sp0.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+//                override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                    Log.d("spinner", "spinner = jenis pekerjaan ${adapterView?.getItemAtPosition(position).toString()}")
+//                }
+//
+//                override fun onNothingSelected(p0: AdapterView<*>?) {
+//
+//                }
+//
+//            }
+//
+//
+//            sp1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+//                override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                    Log.d("spinner", "spinner = jenis akun ${adapterView?.getItemAtPosition(position).toString()}")
+//                }
+//
+//                override fun onNothingSelected(p0: AdapterView<*>?) {
+//
+//                }
+//
+//            }
+
             btnCreateAccount.setOnClickListener {
                 val name = textInputEditTextUsername.text.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
 //                val sentence = "Welcome to Kotlin!"
@@ -58,13 +97,15 @@ class CreateAccountActivity : AppCompatActivity() {
                 } else if (nimNIP.isEmpty()){
                     textInputEditTextNipNim.error = "Silakan Isi NIM/NIP"
                     textInputEditTextNipNim.requestFocus()
-                } else if (radioGroup.checkedRadioButtonId == -1){
-                    Toast.makeText(this@CreateAccountActivity, "Pilih Jenis Akun", Toast.LENGTH_SHORT).show()
-                }
-                else{
-                    val radio:RadioButton = findViewById(radioGroup.checkedRadioButtonId)
+                } else if (nimNIP.length < 5){
+                    textInputEditTextNipNim.error = "Silakan Isi NIM/NIP Dengan Benar"
+                    textInputEditTextNipNim.requestFocus()
+                } else {
+                    val selectedJob = spJobType.selectedItem.toString().lowercase()
 
-                    addAccount(name, nimNIP, radio.text.toString().lowercase())
+                    val selectedAccountType = spAccountType.selectedItem.toString().lowercase()
+
+                    addAccount(name, nimNIP, selectedJob, selectedAccountType)
                 }
             }
         }
@@ -105,7 +146,8 @@ class CreateAccountActivity : AppCompatActivity() {
 //            Toast.LENGTH_SHORT).show()
 //    }
 
-    private fun addAccount(name: String, nimNIP: String, text: String) {
+    private fun addAccount(name: String, nimNIP: String, jobType: String, accountType: String) {
+
         val db = FirebaseFirestore.getInstance()
 
         val initialPassword = nimNIP.subSequence(nimNIP.length-5 , nimNIP.length)
@@ -122,7 +164,8 @@ class CreateAccountActivity : AppCompatActivity() {
             "nama" to name,
             "nim_nip" to nimNIP,
             "password" to finalPassword,
-            "tipe_akun" to text
+            "jenis_pekerjaan" to jobType,
+            "tipe_akun" to accountType
 
         )
 
@@ -132,8 +175,9 @@ class CreateAccountActivity : AppCompatActivity() {
                 Log.d("addAccount", "DocumentSnapshot successfully written!")
                 Log.d("addAccount", "nama = $name")
                 Log.d("addAccount", "nim_nip = $nimNIP")
-                Log.d("addAccount", "radio = ${binding.radioGroup.checkedRadioButtonId}")
-                Log.d("addAccount", "radio = $text")
+//                Log.d("addAccount", "radio = ${binding.radioGroup.checkedRadioButtonId}")
+                Log.d("addAccount", "radio = $jobType")
+                Log.d("addAccount", "radio = $accountType")
                 Log.d("addAccount", "radio = $finalPassword")
                 Toast.makeText(this, "Akun Berhasil Dibuat", Toast.LENGTH_SHORT).show()
             }

@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
 //            setOf(
 //                R.id.dosenFragment, R.id.searchFragment, R.id.profileFragment
 //            )
-                    setOf(
-               R.id.searchFragment, R.id.dosenFragment, R.id.profileFragment
+            setOf(
+               R.id.attendanceFragment, R.id.menuFragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -5,16 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mirandasoftworks.remotefacedetector.databinding.ActivityCameraBinding
+import com.mirandasoftworks.remotefacedetector.databinding.ActivityAddCameraModuleBinding
 
-class Camera : AppCompatActivity() {
+class AddCameraModuleActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityCameraBinding
+    private lateinit var binding: ActivityAddCameraModuleBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCameraBinding.inflate(layoutInflater)
+        binding = ActivityAddCameraModuleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.title = "Tambah Modul Kamera"
 
         with(binding){
             btnAddCameraModule.setOnClickListener {
