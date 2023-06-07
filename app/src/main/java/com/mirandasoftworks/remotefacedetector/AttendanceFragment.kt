@@ -1,5 +1,6 @@
 package com.mirandasoftworks.remotefacedetector
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -23,6 +24,8 @@ class AttendanceFragment : Fragment() {
     private val binding get() = _binding!!
 
 
+    private var db = Firebase.firestore
+
     private lateinit var attendanceAdapter: AttedanceAdapter
 
     private lateinit var searchArrayList : ArrayList<Person>
@@ -42,7 +45,16 @@ class AttendanceFragment : Fragment() {
         @Suppress("DEPRECATION")
         setHasOptionsMenu(true)
 
-        getData()
+        val sharedPreferences = this.requireActivity().getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE)
+        if (sharedPreferences.getString("accountType", "") == "mahasiswa"){
+            getLecturerData()
+        } else if (sharedPreferences.getString("accountType", "") == "dosen"){
+            getLecturerData()
+        } else if (sharedPreferences.getString("accountType", "") == "pejabat"){
+            getAllData()
+        } else{
+            getAllData()
+        }
 
         attendanceAdapter = AttedanceAdapter()
 
@@ -55,9 +67,7 @@ class AttendanceFragment : Fragment() {
 
         return root
     }
-    private fun getData() {
-
-
+    private fun getAllData() {
         val startOfDay = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).toInstant().toEpochMilli()
         val startOfDayTimestamp = Timestamp(startOfDay)
         Log.d("timestamp", startOfDay.toString())
@@ -69,16 +79,9 @@ class AttendanceFragment : Fragment() {
         Log.d("timestamp", endOfDay.toString())
         Log.d("timestamp", endOfDayTimestamp.toString())
 
-
-
-
-        val db = Firebase.firestore
         db.collection("presensi")
-//            .whereEqualTo("pekerjaan", "dosen")
-
 //            .whereGreaterThanOrEqualTo("datetime", startOfDayTimestamp)
 //            .whereLessThan("datetime", endOfDayTimestamp)
-//            .whereEqualTo("nama", searchQuery)
             .orderBy("datetime", Query.Direction.DESCENDING)
             .addSnapshotListener(object : EventListener<QuerySnapshot>{
                 override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
@@ -90,8 +93,55 @@ class AttendanceFragment : Fragment() {
                             Log.d("arraySearch", document.toObject<Person>().toString())
                             Log.d("arraySearch", document.get("nama").toString())
                             Log.d("arraySearchList", searchArrayList.toString())
+                            Log.d("arraySearchList", searchArrayList.size.toString())
                         }
-                        attendanceAdapter.notifyDataSetChanged()
+                        if (searchArrayList.isEmpty()){
+                            binding.tvNoData.visibility = View.VISIBLE
+                        } else{
+                            binding.tvNoData.visibility = View.GONE
+                            attendanceAdapter.notifyDataSetChanged()
+                        }
+
+                    }
+                }
+            })
+    }
+    private fun getLecturerData() {
+        val startOfDay = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).toInstant().toEpochMilli()
+        val startOfDayTimestamp = Timestamp(startOfDay)
+        Log.d("timestamp", startOfDay.toString())
+        Log.d("timestamp", startOfDayTimestamp.toString())
+
+
+        val endOfDay = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).plusDays(1).toInstant().toEpochMilli()
+        val endOfDayTimestamp = Timestamp(endOfDay)
+        Log.d("timestamp", endOfDay.toString())
+        Log.d("timestamp", endOfDayTimestamp.toString())
+
+        db.collection("presensi")
+            .whereEqualTo("jenis_pekerjaan", "dosen")
+//            .whereGreaterThanOrEqualTo("datetime", startOfDayTimestamp)
+//            .whereLessThan("datetime", endOfDayTimestamp)
+            .orderBy("datetime", Query.Direction.DESCENDING)
+            .addSnapshotListener(object : EventListener<QuerySnapshot>{
+                override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
+                    if (!searchState){
+                        searchArrayList.clear()
+                        for (document in value!!){
+                            searchArrayList.add(document.toObject(Person::class.java))
+                            attendanceAdapter.setData(searchArrayList)
+                            Log.d("arraySearch", document.toObject<Person>().toString())
+                            Log.d("arraySearch", document.get("nama").toString())
+                            Log.d("arraySearchList", searchArrayList.toString())
+                            Log.d("arraySearchList", searchArrayList.size.toString())
+                        }
+                        if (searchArrayList.isEmpty()){
+                            binding.tvNoData.visibility = View.VISIBLE
+                        } else{
+                            binding.tvNoData.visibility = View.GONE
+                            attendanceAdapter.notifyDataSetChanged()
+                        }
+
                     }
                 }
             })
@@ -120,7 +170,16 @@ class AttendanceFragment : Fragment() {
                     searchState = false
                     Log.d("searchStateToFalse", searchState.toString())
                     attendanceAdapter.setData(searchArrayList)
-                    getData()
+                    val sharedPreferences = requireActivity().getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE)
+                    if (sharedPreferences.getString("accountType", "") == "mahasiswa"){
+                        getLecturerData()
+                    } else if (sharedPreferences.getString("accountType", "") == "dosen"){
+                        getLecturerData()
+                    } else if (sharedPreferences.getString("accountType", "") == "pejabat"){
+                        getAllData()
+                    } else{
+                        getAllData()
+                    }
                     Log.d("searchStateToFalse", searchArrayList.toString())
                 } else{
                     searchState = true

@@ -22,17 +22,14 @@ class AttedanceAdapter() : RecyclerView.Adapter<AttedanceAdapter.ListViewHolder>
 
     private var listSearch = ArrayList<Person>()
     private var listSearchFull = ArrayList<Person>()
-    private var listSearchFull2 = ArrayList<Person>()
 
     fun setData(list: ArrayList<Person>){
 
         this.listSearch = list
         listSearchFull = ArrayList(listSearch)
 
-
-//        notifyDataSetChanged()
-
     }
+
 
 //    private var exampleList: List<ExampleItem>? = null
 //    private var exampleListFull: List<ExampleItem>? = null

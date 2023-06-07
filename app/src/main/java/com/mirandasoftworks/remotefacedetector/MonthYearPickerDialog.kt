@@ -10,9 +10,6 @@ import java.util.*
 
 class MonthYearPickerDialog(val date: Date = Date()) : DialogFragment() {
 
-    companion object {
-        private const val MAX_YEAR = 2099
-    }
 
     private lateinit var binding: DialogMonthYearPickerBinding
 
@@ -34,12 +31,6 @@ class MonthYearPickerDialog(val date: Date = Date()) : DialogFragment() {
                 "Aug","Sep","Oct","Nov","Dec")
         }
 
-//        binding.pickerYear.run {
-//            val year = cal.get(Calendar.YEAR)
-//            minValue = year
-//            maxValue = MAX_YEAR
-//            value = year
-//        }
 
         binding.pickerYear.run {
             val year = cal.get(Calendar.YEAR)

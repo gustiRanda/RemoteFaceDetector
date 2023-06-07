@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.mirandasoftworks.remotefacedetector.databinding.ActivityLoginBinding
+import com.mirandasoftworks.remotefacedetector.model.Person
 import java.security.MessageDigest
 import java.util.*
+import kotlin.collections.ArrayList
 
 class LoginActivity : AppCompatActivity() {
 
@@ -67,21 +70,21 @@ class LoginActivity : AppCompatActivity() {
 
 
         val initialPassword = password.toByteArray()
-        Log.d("password", "password = $password")
+        Log.d("password", "initialPassword = $password")
         val messageDigest = MessageDigest.getInstance("SHA-256")
+        Log.d("password", "messageDigest = $messageDigest")
         val bytes = messageDigest.digest(initialPassword)
+        Log.d("password", "bytes = $bytes")
         val finalPassword = Base64.getEncoder().encodeToString(bytes)
-        Log.d("password", "password = $finalPassword")
+        Log.d("password", "finalPassword = $finalPassword")
 
         val db = Firebase.firestore
         val query = db.collection("akun").document(username)
         query.get()
-
-            //salah dikit
             .addOnSuccessListener { snapshot ->
-                if (username == snapshot.get("nim_nip")){
+                if (username == snapshot.get("id")){
                     Log.d("loginUsername", "Username ${snapshot.get("nama")} ada")
-                    Log.d("loginUsername", "Username ${snapshot.get("nim_nip")} ada")
+                    Log.d("loginUsername", "Username ${snapshot.get("id")} ada")
                     Log.d("loginUsername", "Username ${snapshot.get("password")} ada")
                     Log.d("loginUsername", "Username ${snapshot.get("tipe_akun")} ada")
 
@@ -106,7 +109,6 @@ class LoginActivity : AppCompatActivity() {
                             }
                         }
                 } else{
-                    Log.d("loginUsername", "Username ${snapshot["nim_nip"]} tidak Terdaftar")
                     Log.d("loginUsername", "Username $username tidak Terdaftar")
                     Toast.makeText(this, "NIM/NIP Anda Tidak Terdaftar",Toast.LENGTH_SHORT).show()
                 }

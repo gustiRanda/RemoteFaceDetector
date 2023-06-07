@@ -162,7 +162,7 @@ class CreateAccountActivity : AppCompatActivity() {
 
         val account = hashMapOf(
             "nama" to name,
-            "nim_nip" to nimNIP,
+            "id" to nimNIP,
             "password" to finalPassword,
             "jenis_pekerjaan" to jobType,
             "tipe_akun" to accountType
@@ -174,7 +174,7 @@ class CreateAccountActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 Log.d("addAccount", "DocumentSnapshot successfully written!")
                 Log.d("addAccount", "nama = $name")
-                Log.d("addAccount", "nim_nip = $nimNIP")
+                Log.d("addAccount", "id = $nimNIP")
 //                Log.d("addAccount", "radio = ${binding.radioGroup.checkedRadioButtonId}")
                 Log.d("addAccount", "radio = $jobType")
                 Log.d("addAccount", "radio = $accountType")

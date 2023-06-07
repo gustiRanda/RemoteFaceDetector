@@ -15,9 +15,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Calendar.LONG_FORMAT
-import java.util.Locale
 
 
 class MenuFragment : Fragment() {
@@ -63,29 +60,22 @@ class MenuFragment : Fragment() {
 
 
         val sharedPreferences = this.requireActivity().getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE)
-//        if (sharedPreferences.getString("accountType", "") == "mahasiswa"){
-//            with(binding){
-//                cvRecapAll.visibility = View.GONE
-//            }
-//        } else{
-//            with(binding){
-//                cvRecapAll.visibility = View.VISIBLE
-//            }
-//        }
+        if (sharedPreferences.getString("accountType", "") == "mahasiswa"){
+            viewTypeOne()
+        } else if (sharedPreferences.getString("accountType", "") == "dosen"){
+            viewTypeOne()
+        } else if (sharedPreferences.getString("accountType", "") == "pejabat"){
+            viewTypeTwo()
+        } else{
+            viewTypeThree()
+        }
 
         binding.btnRecapAllData.setOnClickListener {
-            getMonthlySummaryData()
+            getMonthlyRecapData()
         }
 
         binding.btnRecapMe.setOnClickListener {
-            getSummaryDataOfCurrentUser2()
-        }
-
-        binding.btnLogout.setOnClickListener {
-            sharedPreferences.edit().putBoolean("loginState", false).apply()
-            val intent = Intent(this.requireActivity(), LoginActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+            getSummaryDataOfCurrentUser()
         }
 
         binding.btnAddCameraModule.setOnClickListener {
@@ -98,22 +88,41 @@ class MenuFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.swipeRefreshLayout.setOnRefreshListener {
-//            getSummaryData()
-//            getSummaryDataOfCurrentUser()
-            binding.swipeRefreshLayout.isRefreshing = false
+        binding.btnLogout.setOnClickListener {
+            sharedPreferences.edit().putBoolean("loginState", false).apply()
+            val intent = Intent(this.requireActivity(), LoginActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
         }
-
-
-
-//        getSummaryData()
-//        getSummaryDataOfCurrentUser()
-
 
         return root
     }
 
-    private fun getMonthlySummaryData() {
+    private fun viewTypeThree() {
+        with(binding){
+            cvRecapAll.visibility = View.VISIBLE
+            btnAddCameraModule.visibility = View.VISIBLE
+            btnCreateAccount.visibility = View.VISIBLE
+        }
+    }
+
+    private fun viewTypeTwo() {
+        with(binding){
+            cvRecapAll.visibility = View.VISIBLE
+            btnAddCameraModule.visibility = View.GONE
+            btnCreateAccount.visibility = View.GONE
+        }
+    }
+
+    private fun viewTypeOne() {
+        with(binding){
+            cvRecapAll.visibility = View.GONE
+            btnAddCameraModule.visibility = View.GONE
+            btnCreateAccount.visibility = View.GONE
+        }
+    }
+
+    private fun getMonthlyRecapData() {
         MonthYearPickerDialog().apply {
             setListener { view, year, month, dayOfMonth ->
 
@@ -139,86 +148,87 @@ class MenuFragment : Fragment() {
 
                 val db = FirebaseFirestore.getInstance()
                 val collection = db.collection("rekap")
-                val query = collection
-                    .whereGreaterThanOrEqualTo("datetime", selectedMonthStartTimestamp)
-                    .whereLessThan("datetime", selectedMonthEndTimestamp)
 
-                query.addSnapshotListener { snapshot, e ->
-                    try {
-                        if (e != null) {
-                            Log.w("firebaseFirestoreProfile", "Listen failed snapshot all.", e)
-                            return@addSnapshotListener
-                        }
-
-                        if (snapshot != null) {
-                            list.clear()
-                            set.clear()
-                            Log.d("firebaseFirestoreProfile", "Current data full snapshot1 all: ${snapshot.documents}")
-                            Log.d("firebaseFirestoreProfile", "Current data full snapshot1[0] all: ${snapshot.documents[0]}")
-                            for (i in snapshot.documents.indices){
-                                val dd = snapshot.documents[i]
-                                val aa = snapshot.documents[i].get("datetime")
-                                val bb = aa.toString().subSequence(18, 28).toString()
-                                val cc = aa.toString().subSequence(42, 45).toString()
-
-
-                                fordate = Timestamp(bb.toLong())
-                                val fortime = (bb+cc).toLong()
-
-                                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
-                                val time = simpleTimeFormat.format(fortime)
-
-                                val simpleDateFormat = SimpleDateFormat("dd MM yyyy")
-                                val date = simpleDateFormat.format(fortime)
-
-                                val ee = dd.get("nama")
-                                Log.d("firebaseFirestoreProfile", "Current data ee all: $ee")
-
-
-                                Log.d("firebaseFirestoreProfile", "Current data id: ${i+1}")
-                                Log.d("firebaseFirestoreProfile", "Current data nama: ${snapshot.documents[i].get("nama")}")
-                                Log.d("firebaseFirestoreProfile", "Current data aa: $aa")
-                                Log.d("firebaseFirestoreProfile", "Current data dd: $dd")
-                                Log.d("firebaseFirestoreProfile", "Current data time: $time")
-                                Log.d("firebaseFirestoreProfile", "Current data date: $date")
-
-
-                                list.add(date)
-                                Log.d("firebaseFirestoreProfile", "Current data date list: $list")
-                                Log.d("firebaseFirestoreProfile", "Current data date list size: ${list.size}")
-                                Log.d("firebaseFirestoreProfile", "Current data date list count: ${list.count()}")
-
-
-                                set = list.toMutableSet()
-                                Log.d("firebaseFirestoreProfile", "Current data date set: $set")
-                                Log.d("firebaseFirestoreProfile", "Current data date set size: ${set.size}")
-                                Log.d("firebaseFirestoreProfileAll", "Current data date set count: ${set.count()}")
-
-                                binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                                    .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                                binding.tvSumAll.text = "${set.count()}"
-
-                            }
-
-
-
-                        } else {
-                            Log.d("firebaseFirestoreProfileAll", "Current data: null ")
-                        }
-                    } catch (e: Exception){
-                        Log.d("firebaseFirestoreProfileAll", "system error $e")
-                        // null not attached to a context.
-//                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
-                        binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumAll.text = "${set.count()}"
-                    }
-
-                }
+//                val query = collection
+//                    .whereGreaterThanOrEqualTo("datetime", selectedMonthStartTimestamp)
+//                    .whereLessThan("datetime", selectedMonthEndTimestamp)
+//
+//                query.addSnapshotListener { snapshot, e ->
+//                    try {
+//                        if (e != null) {
+//                            Log.w("firebaseFirestoreProfile", "Listen failed snapshot all.", e)
+//                            return@addSnapshotListener
+//                        }
+//
+//                        if (snapshot != null) {
+//                            list.clear()
+//                            set.clear()
+//                            Log.d("firebaseFirestoreProfile", "Current data full snapshot1 all: ${snapshot.documents}")
+//                            Log.d("firebaseFirestoreProfile", "Current data full snapshot1[0] all: ${snapshot.documents[0]}")
+//                            for (i in snapshot.documents.indices){
+//                                val dd = snapshot.documents[i]
+//                                val aa = snapshot.documents[i].get("datetime")
+//                                val bb = aa.toString().subSequence(18, 28).toString()
+//                                val cc = aa.toString().subSequence(42, 45).toString()
+//
+//
+//                                fordate = Timestamp(bb.toLong())
+//                                val fortime = (bb+cc).toLong()
+//
+//                                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
+//                                val time = simpleTimeFormat.format(fortime)
+//
+//                                val simpleDateFormat = SimpleDateFormat("dd MM yyyy")
+//                                val date = simpleDateFormat.format(fortime)
+//
+//                                val ee = dd.get("nama")
+//                                Log.d("firebaseFirestoreProfile", "Current data ee all: $ee")
+//
+//
+//                                Log.d("firebaseFirestoreProfile", "Current data id: ${i+1}")
+//                                Log.d("firebaseFirestoreProfile", "Current data nama: ${snapshot.documents[i].get("nama")}")
+//                                Log.d("firebaseFirestoreProfile", "Current data aa: $aa")
+//                                Log.d("firebaseFirestoreProfile", "Current data dd: $dd")
+//                                Log.d("firebaseFirestoreProfile", "Current data time: $time")
+//                                Log.d("firebaseFirestoreProfile", "Current data date: $date")
+//
+//
+//                                list.add(date)
+//                                Log.d("firebaseFirestoreProfile", "Current data date list: $list")
+//                                Log.d("firebaseFirestoreProfile", "Current data date list size: ${list.size}")
+//                                Log.d("firebaseFirestoreProfile", "Current data date list count: ${list.count()}")
+//
+//
+//                                set = list.toMutableSet()
+//                                Log.d("firebaseFirestoreProfile", "Current data date set: $set")
+//                                Log.d("firebaseFirestoreProfile", "Current data date set size: ${set.size}")
+//                                Log.d("firebaseFirestoreProfileAll", "Current data date set count: ${set.count()}")
+//
+//                                binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+//                                    .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+//                                binding.tvSumAll.text = "${set.count()}"
+//
+//                            }
+//
+//
+//
+//                        } else {
+//                            Log.d("firebaseFirestoreProfileAll", "Current data: null ")
+//                        }
+//                    } catch (e: Exception){
+//                        Log.d("firebaseFirestoreProfileAll", "system error $e")
+//                        // null not attached to a context.
+////                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
+//                        binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+//                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+//                        binding.tvSumAll.text = "${set.count()}"
+//                    }
+//
+//                }
                 //mungkin bisa ditimpa per hari
-
-                val query1 = collection
-                    .whereEqualTo("jenis_pekerjaan", "dosen")
+                val collection2 = db.collection("presensitest")
+                val query1 = collection2
+                    .whereEqualTo("jenis_pekerjaan", "mahasiswa")
                     .whereGreaterThanOrEqualTo("datetime", selectedMonthStartTimestamp)
                     .whereLessThan("datetime", selectedMonthEndTimestamp)
 
@@ -291,7 +301,7 @@ class MenuFragment : Fragment() {
 //                                binding.textview8.text = "Total Kehadiran Dosen Bulan ${selectedMonthStart.month} $year = ${set2.count()}"
                                 binding.tvLecturerAttendance.text = "Kehadiran Dosen Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
                                     .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                                binding.tvSumLecturer.text = "${set2.count()}"
+                                binding.tvSumLecturer.text = "${list2.count()}"
                             }
 
 
@@ -309,79 +319,79 @@ class MenuFragment : Fragment() {
                     }
 
                 }
-
-                val query2 = collection
-                    .whereEqualTo("jenis_pekerjaan", "mahasiswa")
-                    .whereGreaterThanOrEqualTo("datetime", selectedMonthStartTimestamp)
-                    .whereLessThan("datetime", selectedMonthEndTimestamp)
-
-                query2.addSnapshotListener { snapshot, e ->
-                    try {
-                        if (e != null) {
-                            Log.w("firebaseFirestoreProfileMahasiswa", "Listen failed snapshot mahasiswa.", e)
-                            return@addSnapshotListener
-                        }
-
-                        if (snapshot != null) {
-                            list3.clear()
-                            set3.clear()
-
-                            for (i in snapshot.documents.indices){
-                                val aa = snapshot.documents[i].get("datetime")
-                                val bb = aa.toString().subSequence(18, 28).toString()
-                                val cc = aa.toString().subSequence(42, 45).toString()
-
-
-                                fordate = Timestamp(bb.toLong())
-                                val fortime = (bb+cc).toLong()
-
-                                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
-                                val time = simpleTimeFormat.format(fortime)
-
-                                val simpleDateFormat = SimpleDateFormat("dd MM yyyy")
-                                val date = simpleDateFormat.format(fortime)
-
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data id mahasiswa: ${i+1}")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data nama mahasiswa: ${snapshot.documents[i].get("nama")}")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data aa mahasiswa: $aa")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data time: $time")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date: $date")
-
-
-                                list3.add(date)
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date list3: $list3")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date list3 size: ${list3.size}")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date list3 count: ${list3.count()}")
-
-
-                                set3 = list3.toMutableSet()
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date set3: $set3")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date set3 size: ${set3.size}")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date set3 count: ${set3.count()}")
-
-                                binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                                    .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                                binding.tvSumStudent.text = "${set3.count()}"
-                            }
-
-
-
-                        } else {
-                            Log.d("firebaseFirestoreProfileMahasiswa", "Current data: null")
-//                            binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-//                                .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-//                            binding.tvSumStudent.text = "${set3.count()}"
-                        }
-                    } catch (e: Exception){
-                        Log.d("firebaseFirestoreProfileMahasiswa", "system error $e")
-                        // null not attached to a context.
-//                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
-                        binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumStudent.text = "${set3.count()}"
-                    }
-
-                }
+//
+//                val query2 = collection
+//                    .whereEqualTo("jenis_pekerjaan", "mahasiswa")
+//                    .whereGreaterThanOrEqualTo("datetime", selectedMonthStartTimestamp)
+//                    .whereLessThan("datetime", selectedMonthEndTimestamp)
+//
+//                query2.addSnapshotListener { snapshot, e ->
+//                    try {
+//                        if (e != null) {
+//                            Log.w("firebaseFirestoreProfileMahasiswa", "Listen failed snapshot mahasiswa.", e)
+//                            return@addSnapshotListener
+//                        }
+//
+//                        if (snapshot != null) {
+//                            list3.clear()
+//                            set3.clear()
+//
+//                            for (i in snapshot.documents.indices){
+//                                val aa = snapshot.documents[i].get("datetime")
+//                                val bb = aa.toString().subSequence(18, 28).toString()
+//                                val cc = aa.toString().subSequence(42, 45).toString()
+//
+//
+//                                fordate = Timestamp(bb.toLong())
+//                                val fortime = (bb+cc).toLong()
+//
+//                                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
+//                                val time = simpleTimeFormat.format(fortime)
+//
+//                                val simpleDateFormat = SimpleDateFormat("dd MM yyyy")
+//                                val date = simpleDateFormat.format(fortime)
+//
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data id mahasiswa: ${i+1}")
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data nama mahasiswa: ${snapshot.documents[i].get("nama")}")
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data aa mahasiswa: $aa")
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data time: $time")
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date: $date")
+//
+//
+//                                list3.add(date)
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date list3: $list3")
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date list3 size: ${list3.size}")
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date list3 count: ${list3.count()}")
+//
+//
+//                                set3 = list3.toMutableSet()
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date set3: $set3")
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date set3 size: ${set3.size}")
+//                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date set3 count: ${set3.count()}")
+//
+//                                binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+//                                    .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+//                                binding.tvSumStudent.text = "${set3.count()}"
+//                            }
+//
+//
+//
+//                        } else {
+//                            Log.d("firebaseFirestoreProfileMahasiswa", "Current data: null")
+////                            binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+////                                .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+////                            binding.tvSumStudent.text = "${set3.count()}"
+//                        }
+//                    } catch (e: Exception){
+//                        Log.d("firebaseFirestoreProfileMahasiswa", "system error $e")
+//                        // null not attached to a context.
+////                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
+//                        binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+//                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+//                        binding.tvSumStudent.text = "${set3.count()}"
+//                    }
+//
+//                }
 
             }
             show(this@MenuFragment.parentFragmentManager, "MonthYearPickerDialog")
@@ -389,57 +399,7 @@ class MenuFragment : Fragment() {
     }
 
 
-//    private fun getSummaryDataOfCurrentUser() {
-//
-//        //monthly data count
-//        val dayOfMonth = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).dayOfMonth -1
-//        val startOfMonth = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).minusDays(
-//            dayOfMonth.toLong()
-//        ).toInstant().toEpochMilli()
-//        val startOfMonthTimestamp = Timestamp(startOfMonth)
-//        Log.d("dateMonthStart", dayOfMonth.toString())
-//        Log.d("dateMonthStart", startOfMonth.toString())
-//        Log.d("dateMonthStart", startOfMonthTimestamp.toString())
-//
-//
-//        val currentMonth = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).month.value
-//        val endOfMonth = LocalDate.now().atStartOfDay(ZoneId.of("Asia/Jakarta")).plusMonths(1).minusDays(
-//            dayOfMonth.toLong()
-//        ).toInstant().toEpochMilli()
-//        val endOfMonthTimestamp = Timestamp(endOfMonth)
-////        val endOfMonthTimestamp = Timestamp(endOfMonth)
-////        val startOfDay2 = ZonedDateTime.of(2023, 1, 11, 0, 0, 0, 0, zoneId2).toInstant().toEpochMilli()
-//        Log.d("dateMonthEnd", currentMonth.toString())
-//        Log.d("dateMonthEnd", endOfMonth.toString())
-//        Log.d("dateMonthEnd", endOfMonthTimestamp.toString())
-//
-//
-//
-//        val sharedPreferences = this.requireActivity().getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE)
-//
-//
-//        val db1 = FirebaseFirestore.getInstance()
-//        val collection1 = db1.collection("rekap")
-//        val query1 = collection1
-//            .whereGreaterThanOrEqualTo("datetime", startOfMonthTimestamp)
-//            .whereLessThan("datetime", endOfMonthTimestamp)
-//            .whereEqualTo("nama", "${sharedPreferences.getString("name", "")}")
-//
-//        val countQuery1 = query1.count()
-//        countQuery1.get(AggregateSource.SERVER).addOnCompleteListener {
-//            if (it.isSuccessful) {
-//                val snapshot = it.result
-//                Log.d("firebasFirestoreCount", "Count Bulan ini: ${snapshot.count}")
-//                binding.textview5.text = "Kehadiran anda bulan ini = ${snapshot.count}"
-//            } else {
-//                Log.d("firebasFirestoreCount", "Count failed: ", it.exception)
-//                Toast.makeText(activity, "Gagal Mengambil Data Bulan Ini, Silakan Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//
-//    }
-
-    private fun getSummaryDataOfCurrentUser2() {
+    private fun getSummaryDataOfCurrentUser() {
 
         val sharedPreferences = this.requireActivity().getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE)
 

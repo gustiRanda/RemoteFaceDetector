@@ -4,22 +4,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AttendanceFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".AttendanceFragment">
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_hint"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="40dp"
+            android:layout_height="15dp"
+            android:background="@drawable/lecturer_border"
+            android:orientation="horizontal"/>
+
+        <TextView
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="Dosen"
+            android:textSize="12sp"/>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="40dp"
+            android:layout_height="15dp"
+            android:background="@drawable/tendik_border"
+            android:orientation="horizontal"/>
+
+        <TextView
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="Tendik"
+            android:textSize="12sp"/>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="40dp"
+            android:layout_height="15dp"
+            android:background="@drawable/student_border"
+            android:orientation="horizontal"/>
+
+        <TextView
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="Mahasiswa"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="64dp"
+        android:text="Tidak Ada Data"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:visibility="gone"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_search"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintTop_toBottomOf="@id/tv_no_data"
         tools:listitem="@layout/person_list" />
+
 
 
 
