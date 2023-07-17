@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.mirandasoftworks.remotefacedetector.databinding.PersonListBinding
-import com.mirandasoftworks.remotefacedetector.model.Alat
+import com.mirandasoftworks.remotefacedetector.model.CameraModule
 import com.mirandasoftworks.remotefacedetector.model.Person
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,10 +63,10 @@ class AttedanceAdapter() : RecyclerView.Adapter<AttedanceAdapter.ListViewHolder>
                 collection.get()
                     .addOnSuccessListener { document ->
                         try {
-                            val location = document.toObjects(Alat::class.java)[0].lokasi
-                            Log.d("location","${document.toObjects(Alat::class.java)}")
-                            Log.d("location","${document.toObjects(Alat::class.java)[0]}")
-                            Log.d("location","${document.toObjects(Alat::class.java)[0].lokasi}")
+                            val location = document.toObjects(CameraModule::class.java)[0].lokasi
+                            Log.d("location","${document.toObjects(CameraModule::class.java)}")
+                            Log.d("location","${document.toObjects(CameraModule::class.java)[0]}")
+                            Log.d("location","${document.toObjects(CameraModule::class.java)[0].lokasi}")
                             tvLocation.text = location
                         } catch (e: Exception){
                             Log.d("rv", "system error $e")
@@ -97,7 +97,7 @@ class AttedanceAdapter() : RecyclerView.Adapter<AttedanceAdapter.ListViewHolder>
                                 R.color.blue_sky
                             ))
                     }
-                    person.jenis_pekerjaan.equals("tendik") -> {
+                    person.jenis_pekerjaan.equals("karyawan") -> {
                         binding.llPersonList.setBackgroundColor(
                             ContextCompat.getColor(
                                 root.context,

@@ -17,6 +17,20 @@
         android:theme="@style/Theme.RemoteFaceDetector"
         tools:targetApi="31">
         <activity
+            android:name=".CameraModuleListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".AccountListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".AddCameraModuleActivity"
             android:exported="false">
             <meta-data

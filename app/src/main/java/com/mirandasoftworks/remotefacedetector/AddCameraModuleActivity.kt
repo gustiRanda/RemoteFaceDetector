@@ -9,6 +9,13 @@ import com.mirandasoftworks.remotefacedetector.databinding.ActivityAddCameraModu
 
 class AddCameraModuleActivity : AppCompatActivity() {
 
+    companion object{
+        const val LOCATION = "extra_location"
+        const val ID = "extra_id"
+        const val BUTTON_NAME = "extra_button_name"
+        const val ACTION_BAR_NAME = "extra_action_bar_name"
+    }
+
     private lateinit var binding: ActivityAddCameraModuleBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,9 +23,21 @@ class AddCameraModuleActivity : AppCompatActivity() {
         binding = ActivityAddCameraModuleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Tambah Modul Kamera"
+
+
+        val location = intent.getStringExtra(LOCATION)
+        val id = intent.getStringExtra(ID)
+        val save = intent.getStringExtra(BUTTON_NAME)
+        val actionBarName = intent.getStringExtra(ACTION_BAR_NAME)
+
+        supportActionBar?.title = actionBarName
 
         with(binding){
+
+            textInputEditTextRoomName.setText(location)
+            textInputEditTextIpAddress.setText(id)
+            btnAddCameraModule.text = save
+
             btnAddCameraModule.setOnClickListener {
                 val roomName = textInputEditTextRoomName.text.toString()
                 val ipAddress = textInputEditTextIpAddress.text.toString()
@@ -50,11 +69,11 @@ class AddCameraModuleActivity : AppCompatActivity() {
                 Log.d("addCameraModule", "DocumentSnapshot successfully written!")
                 Log.d("addCameraModule", "IP = $ipAddress")
                 Log.d("addCameraModule", "Ruangan = $roomName")
-                Toast.makeText(this, "Modul Kamera Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
                 Log.d("addCameraModule", "error : $e")
-                Toast.makeText(this, "Gagal Menambahkan Modul Kamera, Silakan Coba Lagi", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
             }
     }
 }

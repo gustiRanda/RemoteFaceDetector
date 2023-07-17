@@ -48,13 +48,15 @@ class AttendanceFragment : Fragment() {
         val sharedPreferences = this.requireActivity().getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE)
         if (sharedPreferences.getString("accountType", "") == "mahasiswa"){
             getLecturerData()
-        } else if (sharedPreferences.getString("accountType", "") == "dosen"){
+        } else if (sharedPreferences.getString("accountType", "") == "dosen/karyawan"){
             getLecturerData()
         } else if (sharedPreferences.getString("accountType", "") == "pejabat"){
             getAllData()
         } else{
             getAllData()
         }
+
+        Log.d("account_type", "${sharedPreferences.getString("accountType", "")}")
 
         attendanceAdapter = AttedanceAdapter()
 
@@ -87,6 +89,7 @@ class AttendanceFragment : Fragment() {
                 override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
                     if (!searchState){
                         searchArrayList.clear()
+                        Log.d("arraySearchList state", searchState.toString())
                         for (document in value!!){
                             searchArrayList.add(document.toObject(Person::class.java))
                             attendanceAdapter.setData(searchArrayList)
@@ -102,6 +105,9 @@ class AttendanceFragment : Fragment() {
                             attendanceAdapter.notifyDataSetChanged()
                         }
 
+                    } else {
+                        Log.d("arraySearchList state", searchState.toString())
+//                        binding.tvNoData.visibility = View.VISIBLE
                     }
                 }
             })
@@ -127,6 +133,7 @@ class AttendanceFragment : Fragment() {
                 override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
                     if (!searchState){
                         searchArrayList.clear()
+                        Log.d("arraySearchList", searchState.toString())
                         for (document in value!!){
                             searchArrayList.add(document.toObject(Person::class.java))
                             attendanceAdapter.setData(searchArrayList)
@@ -141,7 +148,6 @@ class AttendanceFragment : Fragment() {
                             binding.tvNoData.visibility = View.GONE
                             attendanceAdapter.notifyDataSetChanged()
                         }
-
                     }
                 }
             })
@@ -173,7 +179,7 @@ class AttendanceFragment : Fragment() {
                     val sharedPreferences = requireActivity().getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE)
                     if (sharedPreferences.getString("accountType", "") == "mahasiswa"){
                         getLecturerData()
-                    } else if (sharedPreferences.getString("accountType", "") == "dosen"){
+                    } else if (sharedPreferences.getString("accountType", "") == "dosen/karyawan"){
                         getLecturerData()
                     } else if (sharedPreferences.getString("accountType", "") == "pejabat"){
                         getAllData()

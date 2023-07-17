@@ -203,10 +203,10 @@
         </androidx.cardview.widget.CardView>
 
         <Button
-            android:id="@+id/btn_add_camera_module"
+            android:id="@+id/btn_camera_module_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tambah Modul Kamera"
+            android:text="Daftar Modul Kamera"
             android:layout_marginTop="16sp"
             android:layout_marginHorizontal="16dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -214,14 +214,14 @@
             app:layout_constraintTop_toBottomOf="@id/cv_recap_current_user"/>
 
         <Button
-            android:id="@+id/btn_create_account"
+            android:id="@+id/btn_account_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Buat Akun"
+            android:text="Daftar Akun"
             android:layout_marginHorizontal="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_add_camera_module"/>
+            app:layout_constraintTop_toBottomOf="@id/btn_camera_module_list"/>
 
 
         <Button
@@ -231,6 +231,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="32dp"
             android:text="Logout"
+            android:backgroundTint="#ff7f00"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

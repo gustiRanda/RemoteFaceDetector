@@ -16,14 +16,20 @@ import java.util.*
 
 class CreateAccountActivity : AppCompatActivity() {
 
+    companion object{
+
+        const val ID = "extra_id"
+        const val NAME = "extra_name"
+        const val BUTTON_NAME = "extra_button_name"
+        const val ACTION_BAR_NAME = "extra_action_bar_name"
+    }
+
     private lateinit var binding: ActivityCreateAccountBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        supportActionBar?.title = "Buat Akun"
 
 
 //        val list0 = listOf("Mahasiswa", "Tendik", "Dosen")
@@ -35,6 +41,12 @@ class CreateAccountActivity : AppCompatActivity() {
 //        val adapter1 = ArrayAdapter<String>(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, list1)
 //        binding.sp1.adapter = adapter1
 
+        val id = intent.getStringExtra(ID)
+        val name = intent.getStringExtra(NAME)
+        val save = intent.getStringExtra(BUTTON_NAME)
+        val actionBarName = intent.getStringExtra(AddCameraModuleActivity.ACTION_BAR_NAME)
+
+        supportActionBar?.title = actionBarName
 
 
         with(binding){
@@ -83,6 +95,12 @@ class CreateAccountActivity : AppCompatActivity() {
 //                }
 //
 //            }
+
+            textInputEditTextUsername.setText(name)
+            textInputEditTextNipNim.setText(id)
+            btnCreateAccount.text = save
+
+
 
             btnCreateAccount.setOnClickListener {
                 val name = textInputEditTextUsername.text.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
@@ -169,6 +187,8 @@ class CreateAccountActivity : AppCompatActivity() {
 
         )
 
+
+
         db.collection("akun").document(nimNIP)
             .set(account)
             .addOnSuccessListener {
@@ -179,11 +199,11 @@ class CreateAccountActivity : AppCompatActivity() {
                 Log.d("addAccount", "radio = $jobType")
                 Log.d("addAccount", "radio = $accountType")
                 Log.d("addAccount", "radio = $finalPassword")
-                Toast.makeText(this, "Akun Berhasil Dibuat", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
                 Log.d("addAccount", "error : $e")
-                Toast.makeText(this, "Akun Gagal Dibuat, Silakan Coba Lagi", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
             }
     }
 }

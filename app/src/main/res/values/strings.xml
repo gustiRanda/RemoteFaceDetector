@@ -5,13 +5,13 @@
 
     <string-array name="job_type">
         <item>Mahasiswa</item>
-        <item>Tendik</item>
+        <item>Karyawan</item>
         <item>Dosen</item>
     </string-array>
 
     <string-array name="account_type">
         <item>Mahasiswa</item>
-        <item>Dosen</item>
+        <item>Dosen/Karyawan</item>
         <item>Pejabat</item>
         <item>Admin</item>
     </string-array>
