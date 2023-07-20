@@ -22,7 +22,10 @@ class CreateAccountActivity : AppCompatActivity() {
         const val NAME = "extra_name"
         const val BUTTON_NAME = "extra_button_name"
         const val ACTION_BAR_NAME = "extra_action_bar_name"
+        const val CRUD_COMMAND = "extra_crud_command"
     }
+
+    private var finalPassword2 = ""
 
     private lateinit var binding: ActivityCreateAccountBinding
 
@@ -45,6 +48,7 @@ class CreateAccountActivity : AppCompatActivity() {
         val name = intent.getStringExtra(NAME)
         val save = intent.getStringExtra(BUTTON_NAME)
         val actionBarName = intent.getStringExtra(AddCameraModuleActivity.ACTION_BAR_NAME)
+        val crudCommand = intent.getStringExtra(AddCameraModuleActivity.CRUD_COMMAND)
 
         supportActionBar?.title = actionBarName
 
@@ -118,12 +122,18 @@ class CreateAccountActivity : AppCompatActivity() {
                 } else if (nimNIP.length < 5){
                     textInputEditTextNipNim.error = "Silakan Isi NIM/NIP Dengan Benar"
                     textInputEditTextNipNim.requestFocus()
-                } else {
+                } else if (crudCommand == "add"){
                     val selectedJob = spJobType.selectedItem.toString().lowercase()
 
                     val selectedAccountType = spAccountType.selectedItem.toString().lowercase()
 
                     addAccount(name, nimNIP, selectedJob, selectedAccountType)
+                }else {
+                    val selectedJob = spJobType.selectedItem.toString().lowercase()
+
+                    val selectedAccountType = spAccountType.selectedItem.toString().lowercase()
+
+                    editAccount(name, nimNIP, selectedJob, selectedAccountType, id!!)
                 }
             }
         }
@@ -157,6 +167,7 @@ class CreateAccountActivity : AppCompatActivity() {
 //        setOnCheckedChangeListener()
     }
 
+
 //    fun radio_button_click(view: View){
 //        // Get the clicked radio button instance
 //        val radio: RadioButton = findViewById(binding.radioGroup.checkedRadioButtonId)
@@ -164,7 +175,7 @@ class CreateAccountActivity : AppCompatActivity() {
 //            Toast.LENGTH_SHORT).show()
 //    }
 
-    private fun addAccount(name: String, nimNIP: String, jobType: String, accountType: String) {
+    private fun addAccount(name: String, nimNIP: String, selectedJob: String, selectedAccountType: String) {
 
         val db = FirebaseFirestore.getInstance()
 
@@ -182,8 +193,8 @@ class CreateAccountActivity : AppCompatActivity() {
             "nama" to name,
             "id" to nimNIP,
             "password" to finalPassword,
-            "jenis_pekerjaan" to jobType,
-            "tipe_akun" to accountType
+            "jenis_pekerjaan" to selectedJob,
+            "tipe_akun" to selectedAccountType
 
         )
 
@@ -196,14 +207,103 @@ class CreateAccountActivity : AppCompatActivity() {
                 Log.d("addAccount", "nama = $name")
                 Log.d("addAccount", "id = $nimNIP")
 //                Log.d("addAccount", "radio = ${binding.radioGroup.checkedRadioButtonId}")
-                Log.d("addAccount", "radio = $jobType")
-                Log.d("addAccount", "radio = $accountType")
+                Log.d("addAccount", "radio = $selectedJob")
+                Log.d("addAccount", "radio = $selectedAccountType")
                 Log.d("addAccount", "radio = $finalPassword")
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
+                finish()
             }
             .addOnFailureListener { e ->
                 Log.d("addAccount", "error : $e")
                 Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    //dont edit password
+    private fun editAccount(name: String, nimNIP: String, selectedJob: String, selectedAccountType: String, id: String) {
+
+        val db = FirebaseFirestore.getInstance()
+
+        if (id != nimNIP){
+            db.collection("akun").document(id)
+                .get().addOnSuccessListener { doc ->
+                    if (doc != null && doc.exists()) {
+                        val data = doc.data
+                        Log.d("addCameraModule", "data : $data")
+                        Log.d("addCameraModule", "data : ${data!!["id"]}")
+                        Log.d("addCameraModule", "data : ${data["nama"]}")
+                        Log.d("addCameraModule", "data : ${data["jenis_pekerjaan"]}")
+                        Log.d("addCameraModule", "data : ${data["tipe_akun"]}")
+                        finalPassword2 = data["password"].toString()
+
+                        val account = hashMapOf(
+                            "nama" to name,
+                            "id" to nimNIP,
+                            "password" to finalPassword2,
+                            "jenis_pekerjaan" to selectedJob,
+                            "tipe_akun" to selectedAccountType
+                        )
+
+                        Log.d("addCameraModule", "data : ${data["password"]}")
+                        Log.d("addCameraModule", "data : $account")
+                        Log.d("addCameraModule", "data : ${account["id"]}")
+                        Log.d("addCameraModule", "data : ${account["nama"]}")
+                        Log.d("addCameraModule", "data : ${account["jenis_pekerjaan"]}")
+                        Log.d("addCameraModule", "data : ${account["tipe_akun"]}")
+                        Log.d("addCameraModule", "data : ${account["password"]}")
+
+                        db.collection("akun").document(nimNIP)
+                            .set(account)
+                            .addOnSuccessListener {
+                                db.collection("akun").document(id)
+                                    .delete()
+                                    .addOnSuccessListener {
+                                        Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
+                                        finish()
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.d("addCameraModule", "error : $e")
+                                        Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
+                                    }
+                            }
+                    }
+                }
+        } else {
+
+            val initialPassword = nimNIP.subSequence(nimNIP.length-5 , nimNIP.length)
+            Log.d("password", "password = $initialPassword")
+            val password = initialPassword.toString().toByteArray()
+            Log.d("password", "password = $password")
+            val messageDigest = MessageDigest.getInstance("SHA-256")
+            val bytes = messageDigest.digest(password)
+            val finalPassword = Base64.getEncoder().encodeToString(bytes)
+            Log.d("password", "password = $finalPassword")
+
+            val account = hashMapOf(
+                "nama" to name,
+                "id" to nimNIP,
+                "jenis_pekerjaan" to selectedJob,
+                "tipe_akun" to selectedAccountType
+            )
+
+            db.collection("akun").document(id)
+                .update(account as Map<String, Any>)
+                .addOnSuccessListener {
+                    Log.d("addAccount", "DocumentSnapshot successfully written!")
+                    Log.d("addAccount", "nama = $name")
+                    Log.d("addAccount", "id = $nimNIP")
+//                Log.d("addAccount", "radio = ${binding.radioGroup.checkedRadioButtonId}")
+                    Log.d("addAccount", "radio = $selectedJob")
+                    Log.d("addAccount", "radio = $selectedAccountType")
+//                    Log.d("addAccount", "radio = $finalPassword")
+                    Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Log.d("addAccount", "error : $e")
+                    Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
+                }
+        }
+
     }
 }

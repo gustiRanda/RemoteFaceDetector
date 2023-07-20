@@ -1,9 +1,13 @@
 package com.mirandasoftworks.remotefacedetector
 
+import android.app.Dialog
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,7 +32,7 @@ class AccountListAdapter() : RecyclerView.Adapter<AccountListAdapter.ListViewHol
             with(binding){
                 tvUsername.text = account.nama
                 tvNimNip.text = account.id
-                tvJobType.text = account.jenis_pekerjaan
+                tvJobType.text = account.jenis_pekerjaan.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
 
                 btnEdit.setOnClickListener {
                     val intent = Intent(binding.root.context, CreateAccountActivity::class.java)
@@ -36,22 +40,42 @@ class AccountListAdapter() : RecyclerView.Adapter<AccountListAdapter.ListViewHol
                     intent.putExtra(CreateAccountActivity.NAME, account.nama)
                     intent.putExtra(CreateAccountActivity.BUTTON_NAME, "Simpan Perubahan")
                     intent.putExtra(CreateAccountActivity.ACTION_BAR_NAME, "Edit Akun")
+                    intent.putExtra(CreateAccountActivity.CRUD_COMMAND, "edit")
                     binding.root.context.startActivity(intent)
                 }
 
                 btnDelete.setOnClickListener {
-                    val db = FirebaseFirestore.getInstance()
+                    val dialog = Dialog(binding.root.context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    dialog.setCancelable(false)
+                    dialog.setContentView(R.layout.dialog_delete_account_alert)
+                    val tvAccountDialog: TextView = dialog.findViewById(R.id.tv_account_dialog)
+                    val btnYes: Button = dialog.findViewById(R.id.btn_yes)
+                    val btnNo: Button = dialog.findViewById(R.id.btn_no)
 
-                    db.collection("akun").document(account.id.toString())
-                        .delete()
-                        .addOnSuccessListener {
-                            Log.d("addCameraModule", "DocumentSnapshot successfully written!")
-                            Toast.makeText(binding.root.context, "Berhasil", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener { e ->
-                            Log.d("addCameraModule", "error : $e")
-                            Toast.makeText(binding.root.context, "Gagal", Toast.LENGTH_SHORT).show()
-                        }
+                    tvAccountDialog.text = "Hapus Akun ${account.nama}?"
+
+                    btnYes.setOnClickListener {
+                        val db = FirebaseFirestore.getInstance()
+
+                        db.collection("akun").document(account.id.toString())
+                            .delete()
+                            .addOnSuccessListener {
+                                Log.d("addCameraModule", "DocumentSnapshot successfully written!")
+                                Toast.makeText(binding.root.context, "Berhasil", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            }
+                            .addOnFailureListener { e ->
+                                Log.d("addCameraModule", "error : $e")
+                                Toast.makeText(binding.root.context, "Gagal", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+
+                    btnNo.setOnClickListener {
+                        dialog.dismiss()
+                    }
+
+                    dialog.show()
                 }
             }
         }

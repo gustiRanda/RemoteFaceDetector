@@ -1,5 +1,6 @@
 package com.mirandasoftworks.remotefacedetector
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mirandasoftworks.remotefacedetector.databinding.FragmentMenuBinding
@@ -73,16 +78,6 @@ class MenuFragment : Fragment() {
             getSummaryDataOfCurrentUser()
         }
 
-//        binding.btnCameraModuleList.setOnClickListener {
-//            val intent = Intent(this.requireActivity(), AddCameraModuleActivity::class.java)
-//            startActivity(intent)
-//        }
-//
-//        binding.btnAccountList.setOnClickListener {
-//            val intent = Intent(this.requireActivity(), CreateAccountActivity::class.java)
-//            startActivity(intent)
-//        }
-
         binding.btnCameraModuleList.setOnClickListener {
             val intent = Intent(this.requireActivity(), CameraModuleListActivity::class.java)
             startActivity(intent)
@@ -93,11 +88,32 @@ class MenuFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.btnLogout.setOnClickListener {
-            sharedPreferences.edit().putBoolean("loginState", false).apply()
-            val intent = Intent(this.requireActivity(), LoginActivity::class.java)
+        binding.btnChangePassword.setOnClickListener {
+            val intent = Intent(this.requireActivity(), ChangePasswordActivity::class.java)
             startActivity(intent)
-            requireActivity().finish()
+        }
+
+        binding.btnLogout.setOnClickListener {
+            val dialog = Dialog(binding.root.context)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setCancelable(false)
+            dialog.setContentView(R.layout.dialog_logout_alert)
+            val btnYes: Button = dialog.findViewById(R.id.btn_yes)
+            val btnNo: Button = dialog.findViewById(R.id.btn_no)
+
+            btnYes.setOnClickListener {
+                sharedPreferences.edit().putBoolean("loginState", false).apply()
+                dialog.dismiss()
+                val intent = Intent(this.requireActivity(), LoginActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+
+            btnNo.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
         }
 
         return root
@@ -211,7 +227,7 @@ class MenuFragment : Fragment() {
 
                                 binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
                                     .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                                binding.tvSumAll.text = "${set.count()}"
+                                binding.tvSumAll.text = "${list.count()}"
 
                             }
 
@@ -226,7 +242,7 @@ class MenuFragment : Fragment() {
 //                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
                         binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
                             .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumAll.text = "${set.count()}"
+                        binding.tvSumAll.text = "${list.count()}"
                     }
 
                 }
@@ -301,7 +317,7 @@ class MenuFragment : Fragment() {
                         Log.d("firebaseFirestoreProfileDosen", "system error $e")
                         binding.tvLecturerAttendance.text = "Kehadiran Dosen Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
                             .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumLecturer.text = "${set2.count()}"
+                        binding.tvSumLecturer.text = "${list2.count()}"
                         // null not attached to a context.
 //                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
                     }
@@ -359,16 +375,16 @@ class MenuFragment : Fragment() {
 
                                 binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
                                     .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                                binding.tvSumStudent.text = "${set3.count()}"
+                                binding.tvSumStudent.text = "${list3.count()}"
                             }
 
 
 
                         } else {
                             Log.d("firebaseFirestoreProfileMahasiswa", "Current data: null")
-//                            binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-//                                .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-//                            binding.tvSumStudent.text = "${set3.count()}"
+//                          binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+//                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+//                        binding.tvSumStudent.text = "${set3.count()}"
                         }
                     } catch (e: Exception){
                         Log.d("firebaseFirestoreProfileMahasiswa", "system error $e")
@@ -376,7 +392,7 @@ class MenuFragment : Fragment() {
 //                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
                         binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
                             .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumStudent.text = "${set3.count()}"
+                        binding.tvSumStudent.text = "${list3.count()}"
                     }
 
                 }

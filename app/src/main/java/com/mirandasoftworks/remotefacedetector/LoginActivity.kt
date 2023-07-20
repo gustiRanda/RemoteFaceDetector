@@ -97,6 +97,7 @@ class LoginActivity : AppCompatActivity() {
                                 getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putBoolean("loginState", true).apply()
                                 getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putString("accountType", "${snapshot.get("tipe_akun")}").apply()
                                 getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putString("name", "${snapshot.get("nama")}").apply()
+                                getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putString("nimNIP", "${snapshot.get("id")}").apply()
 
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)

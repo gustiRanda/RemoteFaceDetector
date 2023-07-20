@@ -1,9 +1,15 @@
 package com.mirandasoftworks.remotefacedetector
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +33,7 @@ class CameraModuleAdapter() : RecyclerView.Adapter<CameraModuleAdapter.ListViewH
 
         fun bind(cameraModule: CameraModule){
             with(binding){
-                tvLocation.text = cameraModule.lokasi
+                tvLocation.text = cameraModule.lokasi.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
                 tvIpAddress.text = cameraModule.id
 
                 btnEdit.setOnClickListener {
@@ -36,23 +42,44 @@ class CameraModuleAdapter() : RecyclerView.Adapter<CameraModuleAdapter.ListViewH
                     intent.putExtra(AddCameraModuleActivity.ID, cameraModule.id)
                     intent.putExtra(AddCameraModuleActivity.BUTTON_NAME, "Simpan Perubahan")
                     intent.putExtra(AddCameraModuleActivity.ACTION_BAR_NAME, "Edit Modul Kamera")
+                    intent.putExtra(AddCameraModuleActivity.CRUD_COMMAND, "edit")
                     binding.root.context.startActivity(intent)
                 }
 
                 btnDelete.setOnClickListener {
 
-                    val db = FirebaseFirestore.getInstance()
+                    val dialog = Dialog(binding.root.context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    dialog.setCancelable(false)
+                    dialog.setContentView(R.layout.dialog_delete_camera_module_alert)
+                    val tvCameraModuleAlert: TextView = dialog.findViewById(R.id.tv_camera_module_dialog)
+                    val btnYes: Button = dialog.findViewById(R.id.btn_yes)
+                    val btnNo: Button = dialog.findViewById(R.id.btn_no)
 
-                    db.collection("alat").document(cameraModule.id.toString())
-                        .delete()
-                        .addOnSuccessListener {
-                            Log.d("addCameraModule", "DocumentSnapshot successfully written!")
-                            Toast.makeText(binding.root.context, "Berhasil", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener { e ->
-                            Log.d("addCameraModule", "error : $e")
-                            Toast.makeText(binding.root.context, "Gagal", Toast.LENGTH_SHORT).show()
-                        }
+                    tvCameraModuleAlert.text = "Hapus Modul Kamera ${cameraModule.lokasi}?"
+
+                    btnYes.setOnClickListener {
+                        val db = FirebaseFirestore.getInstance()
+
+                        db.collection("alat").document(cameraModule.id.toString())
+                            .delete()
+                            .addOnSuccessListener {
+                                Log.d("addCameraModule", "DocumentSnapshot successfully written!")
+                                Toast.makeText(binding.root.context, "Berhasil", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            }
+                            .addOnFailureListener { e ->
+                                Log.d("addCameraModule", "error : $e")
+                                Toast.makeText(binding.root.context, "Gagal", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+
+                    btnNo.setOnClickListener {
+                        dialog.dismiss()
+                    }
+
+                    dialog.show()
+
                 }
             }
         }
