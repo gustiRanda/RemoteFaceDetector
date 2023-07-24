@@ -12,6 +12,8 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mirandasoftworks.remotefacedetector.databinding.FragmentMenuBinding
@@ -39,10 +41,11 @@ class MenuFragment : Fragment() {
     private var set3 = mutableSetOf<String>()
     private var set4 = mutableSetOf<String>()
 
-    private var list = mutableListOf<String>()
-    private var list2 = mutableListOf<String>()
-    private var list3 = mutableListOf<String>()
+    private var listStudent = mutableListOf<Any>()
+    private var listStaff = mutableListOf<Any>()
+    private var listLecturer = mutableListOf<Any>()
     private var list4 = mutableListOf<String>()
+    private var listAllData = mutableListOf<Any>()
 
 
 
@@ -85,6 +88,11 @@ class MenuFragment : Fragment() {
 
         binding.btnAccountList.setOnClickListener {
             val intent = Intent(this.requireActivity(), AccountListActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnUploadPhoto.setOnClickListener {
+            val intent = Intent(this.requireActivity(), UploadPhotoActivity::class.java)
             startActivity(intent)
         }
 
@@ -182,56 +190,32 @@ class MenuFragment : Fragment() {
                         }
 
                         if (snapshot != null) {
-                            list.clear()
-                            set.clear()
+                            listStudent.clear()
+                            listStaff.clear()
+                            listLecturer.clear()
+                            listAllData.clear()
                             Log.d("firebaseFirestoreProfile", "Current data full snapshot1 all: ${snapshot.documents}")
                             Log.d("firebaseFirestoreProfile", "Current data full snapshot1[0] all: ${snapshot.documents[0]}")
-                            for (i in snapshot.documents.indices){
-                                val dd = snapshot.documents[i]
-                                val aa = snapshot.documents[i].get("datetime")
-                                val bb = aa.toString().subSequence(18, 28).toString()
-                                val cc = aa.toString().subSequence(42, 45).toString()
+                            listAllData.addAll(snapshot.documents)
+                            listStudent = listAllData.filter { it.toString().lowercase().contains("mahasiswa") } as MutableList<Any>
+                            listLecturer = listAllData.filter { it.toString().lowercase().contains("dosen") } as MutableList<Any>
+                            listStaff = listAllData.filter { it.toString().lowercase().contains("karyawan") } as MutableList<Any>
 
+                            binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+                                .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+                            binding.tvSumStudent.text = "${listStudent.count()}"
 
-                                fordate = Timestamp(bb.toLong())
-                                val fortime = (bb+cc).toLong()
+                            binding.tvStaffAttendance.text = "Kehadiran Karyawan Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+                                .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+                            binding.tvSumStaff.text = "${listStaff.count()}"
 
-                                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
-                                val time = simpleTimeFormat.format(fortime)
+                            binding.tvLecturerAttendance.text = "Kehadiran Dosen Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+                                .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+                            binding.tvSumLecturer.text = "${listLecturer.count()}"
 
-                                val simpleDateFormat = SimpleDateFormat("dd MM yyyy")
-                                val date = simpleDateFormat.format(fortime)
-
-                                val ee = dd.get("nama")
-                                Log.d("firebaseFirestoreProfile", "Current data ee all: $ee")
-
-
-                                Log.d("firebaseFirestoreProfile", "Current data id: ${i+1}")
-                                Log.d("firebaseFirestoreProfile", "Current data nama: ${snapshot.documents[i].get("nama")}")
-                                Log.d("firebaseFirestoreProfile", "Current data aa: $aa")
-                                Log.d("firebaseFirestoreProfile", "Current data dd: $dd")
-                                Log.d("firebaseFirestoreProfile", "Current data time: $time")
-                                Log.d("firebaseFirestoreProfile", "Current data date: $date")
-
-
-                                list.add(date)
-                                Log.d("firebaseFirestoreProfile", "Current data date list: $list")
-                                Log.d("firebaseFirestoreProfile", "Current data date list size: ${list.size}")
-                                Log.d("firebaseFirestoreProfile", "Current data date list count: ${list.count()}")
-
-
-                                set = list.toMutableSet()
-                                Log.d("firebaseFirestoreProfile", "Current data date set: $set")
-                                Log.d("firebaseFirestoreProfile", "Current data date set size: ${set.size}")
-                                Log.d("firebaseFirestoreProfileAll", "Current data date set count: ${set.count()}")
-
-                                binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                                    .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                                binding.tvSumAll.text = "${list.count()}"
-
-                            }
-
-
+                            binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+                                .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+                            binding.tvSumAll.text = "${listAllData.count()}"
 
                         } else {
                             Log.d("firebaseFirestoreProfileAll", "Current data: null ")
@@ -240,159 +224,21 @@ class MenuFragment : Fragment() {
                         Log.d("firebaseFirestoreProfileAll", "system error $e")
                         // null not attached to a context.
 //                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
-                        binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumAll.text = "${list.count()}"
-                    }
-
-                }
-                //mungkin bisa ditimpa per hari
-                val query1 = collection
-                    .whereEqualTo("jenis_pekerjaan", "dosen")
-                    .whereGreaterThanOrEqualTo("datetime", selectedMonthStartTimestamp)
-                    .whereLessThan("datetime", selectedMonthEndTimestamp)
-
-                query1.addSnapshotListener { snapshot, e ->
-                    try {
-                        if (e != null) {
-                            Log.w("firebaseFirestoreProfile", "Listen failed snapshot dosen.", e)
-                            return@addSnapshotListener
-                        }
-
-                        if (snapshot != null) {
-                            list2.clear()
-                            set2.clear()
-                            Log.d("firebaseFirestoreProfile", "Current data full snapshot dosen: ${snapshot.documents}")
-                            Log.d("firebaseFirestoreProfile", "Current data full snapshot[1] dosen: ${snapshot.documents[0]}")
-
-                            for (i in snapshot.documents.indices){
-                                val aa = snapshot.documents[i].get("datetime")
-                                val nama = snapshot.documents[i].get("nama")
-
-
-
-                                val bb = aa.toString().subSequence(18, 28).toString()
-                                val cc = aa.toString().subSequence(42, 45).toString()
-
-
-                                fordate = Timestamp(bb.toLong())
-                                val fortime = (bb+cc).toLong()
-
-                                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
-                                val time = simpleTimeFormat.format(fortime)
-
-                                val simpleDateFormat = SimpleDateFormat("dd MM yyyy")
-                                val date = simpleDateFormat.format(fortime)
-
-                                Log.d("firebaseFirestoreProfile", "Current data id dosen: ${i+1}")
-                                Log.d("firebaseFirestoreProfile", "Current data nama dosen: ${snapshot.documents[i].get("nama")}")
-                                Log.d("firebaseFirestoreProfile", "Current data aa dosen: $aa")
-                                Log.d("firebaseFirestoreProfile", "Current data time: $time")
-                                Log.d("firebaseFirestoreProfile", "Current data date: $date")
-
-
-                                list2.add(date)
-                                Log.d("firebaseFirestoreProfile", "Current data date list2: $list2")
-                                Log.d("firebaseFirestoreProfile", "Current data date list2 size: ${list2.size}")
-                                Log.d("firebaseFirestoreProfile", "Current data date list2 count: ${list2.count()}")
-
-
-                                set2 = list2.toMutableSet()
-                                Log.d("firebaseFirestoreProfile", "Current data date set2: $set2")
-                                Log.d("firebaseFirestoreProfile", "Current data date set2 size: ${set2.size}")
-                                Log.d("firebaseFirestoreProfileDosen", "Current data date set2 count: ${set2.count()}")
-
-//                                binding.textview8.text = "Total Kehadiran Dosen Bulan ${selectedMonthStart.month} $year = ${set2.count()}"
-                                binding.tvLecturerAttendance.text = "Kehadiran Dosen Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                                    .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                                binding.tvSumLecturer.text = "${list2.count()}"
-                            }
-
-
-
-                        } else {
-                            Log.d("firebaseFirestoreProfileDosen", "Current data: null")
-                        }
-                    } catch (e: Exception){
-                        Log.d("firebaseFirestoreProfileDosen", "system error $e")
-                        binding.tvLecturerAttendance.text = "Kehadiran Dosen Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumLecturer.text = "${list2.count()}"
-                        // null not attached to a context.
-//                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
-                    }
-
-                }
-//
-                val query2 = collection
-                    .whereEqualTo("jenis_pekerjaan", "mahasiswa")
-                    .whereGreaterThanOrEqualTo("datetime", selectedMonthStartTimestamp)
-                    .whereLessThan("datetime", selectedMonthEndTimestamp)
-
-                query2.addSnapshotListener { snapshot, e ->
-                    try {
-                        if (e != null) {
-                            Log.w("firebaseFirestoreProfileMahasiswa", "Listen failed snapshot mahasiswa.", e)
-                            return@addSnapshotListener
-                        }
-
-                        if (snapshot != null) {
-                            list3.clear()
-                            set3.clear()
-
-                            for (i in snapshot.documents.indices){
-                                val aa = snapshot.documents[i].get("datetime")
-                                val bb = aa.toString().subSequence(18, 28).toString()
-                                val cc = aa.toString().subSequence(42, 45).toString()
-
-
-                                fordate = Timestamp(bb.toLong())
-                                val fortime = (bb+cc).toLong()
-
-                                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
-                                val time = simpleTimeFormat.format(fortime)
-
-                                val simpleDateFormat = SimpleDateFormat("dd MM yyyy")
-                                val date = simpleDateFormat.format(fortime)
-
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data id mahasiswa: ${i+1}")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data nama mahasiswa: ${snapshot.documents[i].get("nama")}")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data aa mahasiswa: $aa")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data time: $time")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date: $date")
-
-
-                                list3.add(date)
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date list3: $list3")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date list3 size: ${list3.size}")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date list3 count: ${list3.count()}")
-
-
-                                set3 = list3.toMutableSet()
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date set3: $set3")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date set3 size: ${set3.size}")
-                                Log.d("firebaseFirestoreProfileMahasiswa", "Current data date set3 count: ${set3.count()}")
-
-                                binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                                    .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                                binding.tvSumStudent.text = "${list3.count()}"
-                            }
-
-
-
-                        } else {
-                            Log.d("firebaseFirestoreProfileMahasiswa", "Current data: null")
-//                          binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-//                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-//                        binding.tvSumStudent.text = "${set3.count()}"
-                        }
-                    } catch (e: Exception){
-                        Log.d("firebaseFirestoreProfileMahasiswa", "system error $e")
-                        // null not attached to a context.
-//                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
                         binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
                             .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumStudent.text = "${list3.count()}"
+                        binding.tvSumStudent.text = "${listStudent.count()}"
+
+                        binding.tvStaffAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+                        binding.tvSumStaff.text = "${listStaff.count()}"
+
+                        binding.tvLecturerAttendance.text = "Kehadiran Dosen Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+                        binding.tvSumLecturer.text = "${listLecturer.count()}"
+
+                        binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+                        binding.tvSumAll.text = "${listAllData.count()}"
                     }
 
                 }
@@ -447,11 +293,6 @@ class MenuFragment : Fragment() {
                             list4.clear()
                             set4.clear()
                             Log.d("firebaseFirestoreProfile2", "Current data full snapshot1: ${snapshot.documents}")
-
-//                            if (snapshot.documents.size == 0){
-//                                binding.tvSumCurrentUser.text = "kehadiran anda bulan ${selectedMonthStart.month} $year = 0"
-//                            }
-
                             Log.d("firebaseFirestoreProfile2", "Current data index snapshot1[0]: ${snapshot.documents[0]}")
 
                             for (i in snapshot.documents.indices){
