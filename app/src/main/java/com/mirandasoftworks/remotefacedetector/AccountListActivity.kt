@@ -48,9 +48,6 @@ class AccountListActivity : AppCompatActivity() {
         with(binding){
             btnAddAccount.setOnClickListener {
                 val intent = Intent(this@AccountListActivity, CreateAccountActivity::class.java)
-                intent.putExtra(CreateAccountActivity.BUTTON_NAME, "Buat Akun")
-                intent.putExtra(CreateAccountActivity.ACTION_BAR_NAME, "Buat Akun")
-                intent.putExtra(CreateAccountActivity.CRUD_COMMAND, "add")
                 startActivity(intent)
             }
         }

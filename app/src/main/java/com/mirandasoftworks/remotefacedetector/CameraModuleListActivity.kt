@@ -49,9 +49,6 @@ class CameraModuleListActivity : AppCompatActivity() {
         with(binding){
             btnAddCameraModule.setOnClickListener {
                 val intent = Intent(this@CameraModuleListActivity, AddCameraModuleActivity::class.java)
-                intent.putExtra(AddCameraModuleActivity.BUTTON_NAME, "Tambah Modul Kamera")
-                intent.putExtra(AddCameraModuleActivity.ACTION_BAR_NAME, "Tambah Modul Kamera")
-                intent.putExtra(AddCameraModuleActivity.CRUD_COMMAND, "add")
                 startActivity(intent)
             }
         }

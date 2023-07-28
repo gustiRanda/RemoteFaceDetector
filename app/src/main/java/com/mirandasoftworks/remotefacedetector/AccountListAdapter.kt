@@ -35,12 +35,9 @@ class AccountListAdapter() : RecyclerView.Adapter<AccountListAdapter.ListViewHol
                 tvJobType.text = account.jenis_pekerjaan.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
 
                 btnEdit.setOnClickListener {
-                    val intent = Intent(binding.root.context, CreateAccountActivity::class.java)
-                    intent.putExtra(CreateAccountActivity.ID, account.id)
-                    intent.putExtra(CreateAccountActivity.NAME, account.nama)
-                    intent.putExtra(CreateAccountActivity.BUTTON_NAME, "Simpan Perubahan")
-                    intent.putExtra(CreateAccountActivity.ACTION_BAR_NAME, "Edit Akun")
-                    intent.putExtra(CreateAccountActivity.CRUD_COMMAND, "edit")
+                    val intent = Intent(binding.root.context, EditAccountActivity::class.java)
+                    intent.putExtra(EditAccountActivity.ID, account.id)
+                    intent.putExtra(EditAccountActivity.NAME, account.nama)
                     binding.root.context.startActivity(intent)
                 }
 

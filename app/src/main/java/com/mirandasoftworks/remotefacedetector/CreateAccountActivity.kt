@@ -16,17 +16,6 @@ import java.util.*
 
 class CreateAccountActivity : AppCompatActivity() {
 
-    companion object{
-
-        const val ID = "extra_id"
-        const val NAME = "extra_name"
-        const val BUTTON_NAME = "extra_button_name"
-        const val ACTION_BAR_NAME = "extra_action_bar_name"
-        const val CRUD_COMMAND = "extra_crud_command"
-    }
-
-    private var finalPassword2 = ""
-
     private lateinit var binding: ActivityCreateAccountBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,83 +23,13 @@ class CreateAccountActivity : AppCompatActivity() {
         binding = ActivityCreateAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-//        val list0 = listOf("Mahasiswa", "Tendik", "Dosen")
-//        val list1 = listOf("Mahasiswa", "Dosen", "Pejabat", "Admin")
-//
-//        val adapter0 = ArrayAdapter<String>(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, list0)
-//        binding.sp0.adapter = adapter0
-//
-//        val adapter1 = ArrayAdapter<String>(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, list1)
-//        binding.sp1.adapter = adapter1
-
-        val id = intent.getStringExtra(ID)
-        val name = intent.getStringExtra(NAME)
-        val save = intent.getStringExtra(BUTTON_NAME)
-        val actionBarName = intent.getStringExtra(AddCameraModuleActivity.ACTION_BAR_NAME)
-        val crudCommand = intent.getStringExtra(AddCameraModuleActivity.CRUD_COMMAND)
-
-        supportActionBar?.title = actionBarName
-
+        supportActionBar?.title = "Buat Akun"
 
         with(binding){
-//            btnCreateAccount.setOnClickListener {
-//                val name = textInputEditTextUsername.text.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
-////                val sentence = "Welcome to Kotlin!"
-////                val words = sentence.split(' ');
-////                println(words.joinToString(separator = "_") { word -> word.replaceFirstChar { it.lowercase() } })
-//                val nimNIP = textInputEditTextNipNim.text.toString()
-//
-//                if (name.isEmpty()){
-//                    textInputEditTextUsername.error = "Silakan Isi Nama"
-//                    textInputEditTextUsername.requestFocus()
-//                } else if (nimNIP.isEmpty()){
-//                    textInputEditTextNipNim.error = "Silakan Isi NIM/NIP"
-//                    textInputEditTextNipNim.requestFocus()
-//                } else if (radioGroup.checkedRadioButtonId == -1){
-//                    Toast.makeText(this@CreateAccountActivity, "Pilih Jenis Akun", Toast.LENGTH_SHORT).show()
-//                }
-//                else{
-//                    val radio:RadioButton = findViewById(radioGroup.checkedRadioButtonId)
-//
-//                    addAccount(name, nimNIP, radio.text.toString().lowercase())
-//                }
-//            }
-
-//            sp0.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-//                override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                    Log.d("spinner", "spinner = jenis pekerjaan ${adapterView?.getItemAtPosition(position).toString()}")
-//                }
-//
-//                override fun onNothingSelected(p0: AdapterView<*>?) {
-//
-//                }
-//
-//            }
-//
-//
-//            sp1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-//                override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                    Log.d("spinner", "spinner = jenis akun ${adapterView?.getItemAtPosition(position).toString()}")
-//                }
-//
-//                override fun onNothingSelected(p0: AdapterView<*>?) {
-//
-//                }
-//
-//            }
-
-            textInputEditTextUsername.setText(name)
-            textInputEditTextNipNim.setText(id)
-            btnCreateAccount.text = save
-
-
 
             btnCreateAccount.setOnClickListener {
                 val name = textInputEditTextUsername.text.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
-//                val sentence = "Welcome to Kotlin!"
-//                val words = sentence.split(' ');
-//                println(words.joinToString(separator = "_") { word -> word.replaceFirstChar { it.lowercase() } })
+
                 val nimNIP = textInputEditTextNipNim.text.toString()
 
                 if (name.isEmpty()){
@@ -122,58 +41,16 @@ class CreateAccountActivity : AppCompatActivity() {
                 } else if (nimNIP.length < 5){
                     textInputEditTextNipNim.error = "Silakan Isi NIM/NIP Dengan Benar"
                     textInputEditTextNipNim.requestFocus()
-                } else if (crudCommand == "add"){
+                } else {
                     val selectedJob = spJobType.selectedItem.toString().lowercase()
 
                     val selectedAccountType = spAccountType.selectedItem.toString().lowercase()
 
                     addAccount(name, nimNIP, selectedJob, selectedAccountType)
-                }else {
-                    val selectedJob = spJobType.selectedItem.toString().lowercase()
-
-                    val selectedAccountType = spAccountType.selectedItem.toString().lowercase()
-
-                    editAccount(name, nimNIP, selectedJob, selectedAccountType, id!!)
                 }
             }
         }
-
-//        // Get radio group selected item using on checked change listener
-//        binding.radioGroup.setOnCheckedChangeListener(
-//            RadioGroup.OnCheckedChangeListener { group, checkedId ->
-//                val radio: RadioButton = findViewById(checkedId)
-//                Toast.makeText(this," On checked change :"+
-//                        " ${radio.text}",
-//                    Toast.LENGTH_SHORT).show()
-//            })
-//        // Get radio group selected status and text using button click event
-//        binding.btnCreateAccount.setOnClickListener{
-//            // Get the checked radio button id from radio group
-//            var id: Int = binding.radioGroup.checkedRadioButtonId
-//            if (id!=-1){ // If any radio button checked from radio group
-//                // Get the instance of radio button using id
-//                val radio:RadioButton = findViewById(id)
-//                Toast.makeText(this,"On button click :" +
-//                        " ${radio.text}",
-//                    Toast.LENGTH_SHORT).show()
-//            }else{
-//                // If no radio button checked in this radio group
-//                Toast.makeText(this,"On button click :" +
-//                        " nothing selected",
-//                    Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
-//        setOnCheckedChangeListener()
     }
-
-
-//    fun radio_button_click(view: View){
-//        // Get the clicked radio button instance
-//        val radio: RadioButton = findViewById(binding.radioGroup.checkedRadioButtonId)
-//        Toast.makeText(applicationContext,"On click : ${radio.text}",
-//            Toast.LENGTH_SHORT).show()
-//    }
 
     private fun addAccount(name: String, nimNIP: String, selectedJob: String, selectedAccountType: String) {
 
@@ -217,93 +94,5 @@ class CreateAccountActivity : AppCompatActivity() {
                 Log.d("addAccount", "error : $e")
                 Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
             }
-    }
-
-    //dont edit password
-    private fun editAccount(name: String, nimNIP: String, selectedJob: String, selectedAccountType: String, id: String) {
-
-        val db = FirebaseFirestore.getInstance()
-
-        if (id != nimNIP){
-            db.collection("akun").document(id)
-                .get().addOnSuccessListener { doc ->
-                    if (doc != null && doc.exists()) {
-                        val data = doc.data
-                        Log.d("addCameraModule", "data : $data")
-                        Log.d("addCameraModule", "data : ${data!!["id"]}")
-                        Log.d("addCameraModule", "data : ${data["nama"]}")
-                        Log.d("addCameraModule", "data : ${data["jenis_pekerjaan"]}")
-                        Log.d("addCameraModule", "data : ${data["tipe_akun"]}")
-                        finalPassword2 = data["password"].toString()
-
-                        val account = hashMapOf(
-                            "nama" to name,
-                            "id" to nimNIP,
-                            "password" to finalPassword2,
-                            "jenis_pekerjaan" to selectedJob,
-                            "tipe_akun" to selectedAccountType
-                        )
-
-                        Log.d("addCameraModule", "data : ${data["password"]}")
-                        Log.d("addCameraModule", "data : $account")
-                        Log.d("addCameraModule", "data : ${account["id"]}")
-                        Log.d("addCameraModule", "data : ${account["nama"]}")
-                        Log.d("addCameraModule", "data : ${account["jenis_pekerjaan"]}")
-                        Log.d("addCameraModule", "data : ${account["tipe_akun"]}")
-                        Log.d("addCameraModule", "data : ${account["password"]}")
-
-                        db.collection("akun").document(nimNIP)
-                            .set(account)
-                            .addOnSuccessListener {
-                                db.collection("akun").document(id)
-                                    .delete()
-                                    .addOnSuccessListener {
-                                        Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
-                                        finish()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.d("addCameraModule", "error : $e")
-                                        Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
-                                    }
-                            }
-                    }
-                }
-        } else {
-
-            val initialPassword = nimNIP.subSequence(nimNIP.length-5 , nimNIP.length)
-            Log.d("password", "password = $initialPassword")
-            val password = initialPassword.toString().toByteArray()
-            Log.d("password", "password = $password")
-            val messageDigest = MessageDigest.getInstance("SHA-256")
-            val bytes = messageDigest.digest(password)
-            val finalPassword = Base64.getEncoder().encodeToString(bytes)
-            Log.d("password", "password = $finalPassword")
-
-            val account = hashMapOf(
-                "nama" to name,
-                "id" to nimNIP,
-                "jenis_pekerjaan" to selectedJob,
-                "tipe_akun" to selectedAccountType
-            )
-
-            db.collection("akun").document(id)
-                .update(account as Map<String, Any>)
-                .addOnSuccessListener {
-                    Log.d("addAccount", "DocumentSnapshot successfully written!")
-                    Log.d("addAccount", "nama = $name")
-                    Log.d("addAccount", "id = $nimNIP")
-//                Log.d("addAccount", "radio = ${binding.radioGroup.checkedRadioButtonId}")
-                    Log.d("addAccount", "radio = $selectedJob")
-                    Log.d("addAccount", "radio = $selectedAccountType")
-//                    Log.d("addAccount", "radio = $finalPassword")
-                    Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    Log.d("addAccount", "error : $e")
-                    Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
-                }
-        }
-
     }
 }

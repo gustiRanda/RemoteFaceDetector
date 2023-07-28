@@ -132,6 +132,7 @@ class MenuFragment : Fragment() {
             cvRecapAll.visibility = View.VISIBLE
             btnCameraModuleList.visibility = View.VISIBLE
             btnAccountList.visibility = View.VISIBLE
+            btnUploadPhoto.visibility = View.VISIBLE
         }
     }
 
@@ -140,6 +141,7 @@ class MenuFragment : Fragment() {
             cvRecapAll.visibility = View.VISIBLE
             btnCameraModuleList.visibility = View.GONE
             btnAccountList.visibility = View.GONE
+            btnUploadPhoto.visibility = View.GONE
         }
     }
 
@@ -148,6 +150,7 @@ class MenuFragment : Fragment() {
             cvRecapAll.visibility = View.GONE
             btnCameraModuleList.visibility = View.GONE
             btnAccountList.visibility = View.GONE
+            btnUploadPhoto.visibility = View.GONE
         }
     }
 

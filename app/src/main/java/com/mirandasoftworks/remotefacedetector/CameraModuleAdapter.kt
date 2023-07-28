@@ -37,12 +37,9 @@ class CameraModuleAdapter() : RecyclerView.Adapter<CameraModuleAdapter.ListViewH
                 tvIpAddress.text = cameraModule.id
 
                 btnEdit.setOnClickListener {
-                    val intent = Intent(binding.root.context, AddCameraModuleActivity::class.java)
-                    intent.putExtra(AddCameraModuleActivity.LOCATION, cameraModule.lokasi)
-                    intent.putExtra(AddCameraModuleActivity.ID, cameraModule.id)
-                    intent.putExtra(AddCameraModuleActivity.BUTTON_NAME, "Simpan Perubahan")
-                    intent.putExtra(AddCameraModuleActivity.ACTION_BAR_NAME, "Edit Modul Kamera")
-                    intent.putExtra(AddCameraModuleActivity.CRUD_COMMAND, "edit")
+                    val intent = Intent(binding.root.context, EditCameraModuleActivity::class.java)
+                    intent.putExtra(EditCameraModuleActivity.LOCATION, cameraModule.lokasi)
+                    intent.putExtra(EditCameraModuleActivity.ID, cameraModule.id)
                     binding.root.context.startActivity(intent)
                 }
 
