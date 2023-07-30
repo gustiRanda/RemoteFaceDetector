@@ -137,10 +137,6 @@ class AttendanceFragment : Fragment() {
                         for (document in value!!){
                             searchArrayList.add(document.toObject(Person::class.java))
                             attendanceAdapter.setData(searchArrayList)
-                            Log.d("arraySearch", document.toObject<Person>().toString())
-                            Log.d("arraySearch", document.get("nama").toString())
-                            Log.d("arraySearchList", searchArrayList.toString())
-                            Log.d("arraySearchList", searchArrayList.size.toString())
                         }
                         if (searchArrayList.isEmpty()){
                             binding.tvNoData.visibility = View.VISIBLE

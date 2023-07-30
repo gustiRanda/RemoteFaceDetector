@@ -29,40 +29,37 @@ class EditCameraModuleActivity : AppCompatActivity() {
         with(binding){
 
             textInputEditTextRoomName.setText(location)
-            textInputEditTextIpAddress.setText(id)
+            textInputEditTextMacAddress.setText(id)
 
             btnAddCameraModule.setOnClickListener {
                 val roomName = textInputEditTextRoomName.text.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
-                val ipAddress = textInputEditTextIpAddress.text.toString()
+                val macAddress = textInputEditTextMacAddress.text.toString()
 
                 if (roomName.isEmpty()){
                     textInputEditTextRoomName.error = "Silakan Isi Nama Ruangan"
                     textInputEditTextRoomName.requestFocus()
-                } else if (ipAddress.isEmpty()){
-                    textInputEditTextIpAddress.error = "Silakan Isi Alamat IP"
-                    textInputEditTextIpAddress.requestFocus()
+                } else if (macAddress.isEmpty()){
+                    textInputEditTextMacAddress.error = "Silakan Isi Alamat MAC"
+                    textInputEditTextMacAddress.requestFocus()
                 } else {
-                    editCameraModule(roomName, ipAddress, id!!)
+                    editCameraModule(roomName, macAddress, id!!)
                 }
             }
         }
     }
 
-    private fun editCameraModule(roomName: String, ipAddress: String, id: String) {
+    private fun editCameraModule(roomName: String, macAddress: String, id: String) {
         val db = FirebaseFirestore.getInstance()
 
         val cameraModule = hashMapOf(
-            "id" to ipAddress,
+            "id" to macAddress,
             "lokasi" to roomName
         )
-        if (id != ipAddress){
+        if (id != macAddress){
             db.collection("alat").document(id)
                 .get().addOnSuccessListener { doc ->
                     if (doc != null && doc.exists()) {
-                        Log.d("addCameraModule", "data : $cameraModule")
-                        Log.d("addCameraModule", "data : ${cameraModule["id"]}")
-                        Log.d("addCameraModule", "data : ${cameraModule["lokasi"]}")
-                        db.collection("alat").document(ipAddress)
+                        db.collection("alat").document(macAddress)
                             .set(cameraModule)
                             .addOnSuccessListener {
                                 db.collection("alat").document(id)
@@ -82,9 +79,6 @@ class EditCameraModuleActivity : AppCompatActivity() {
             db.collection("alat").document(id)
                 .update(cameraModule as Map<String, Any>)
                 .addOnSuccessListener {
-                    Log.d("addCameraModule", "DocumentSnapshot successfully written!")
-                    Log.d("addCameraModule", "IP = $ipAddress")
-                    Log.d("addCameraModule", "Ruangan = $roomName")
                     Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
                     finish()
                 }

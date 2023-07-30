@@ -68,28 +68,13 @@ class EditAccountActivity : AppCompatActivity() {
                 .get().addOnSuccessListener { doc ->
                     if (doc != null && doc.exists()) {
                         val data = doc.data
-                        Log.d("addCameraModule", "data : $data")
-                        Log.d("addCameraModule", "data : ${data!!["id"]}")
-                        Log.d("addCameraModule", "data : ${data["nama"]}")
-                        Log.d("addCameraModule", "data : ${data["jenis_pekerjaan"]}")
-                        Log.d("addCameraModule", "data : ${data["tipe_akun"]}")
-
                         val account = hashMapOf(
                             "nama" to name,
                             "id" to nimNIP,
-                            "password" to data["password"].toString(),
+                            "password" to data!!["password"].toString(),
                             "jenis_pekerjaan" to selectedJob,
                             "tipe_akun" to selectedAccountType
                         )
-
-                        Log.d("addCameraModule", "data : ${data["password"]}")
-                        Log.d("addCameraModule", "data : $account")
-                        Log.d("addCameraModule", "data : ${account["id"]}")
-                        Log.d("addCameraModule", "data : ${account["nama"]}")
-                        Log.d("addCameraModule", "data : ${account["jenis_pekerjaan"]}")
-                        Log.d("addCameraModule", "data : ${account["tipe_akun"]}")
-                        Log.d("addCameraModule", "data : ${account["password"]}")
-
                         db.collection("akun").document(nimNIP)
                             .set(account)
                             .addOnSuccessListener {
@@ -117,11 +102,6 @@ class EditAccountActivity : AppCompatActivity() {
             db.collection("akun").document(id)
                 .update(account as Map<String, Any>)
                 .addOnSuccessListener {
-                    Log.d("addAccount", "DocumentSnapshot successfully written!")
-                    Log.d("addAccount", "nama = $name")
-                    Log.d("addAccount", "id = $nimNIP")
-                    Log.d("addAccount", "radio = $selectedJob")
-                    Log.d("addAccount", "radio = $selectedAccountType")
                     Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
                     finish()
                 }

@@ -37,13 +37,5 @@ class SplashScreenActivity : AppCompatActivity() {
             }
 
         }
-
-//        binding.ivSplashScreen.alpha = 0f
-//        binding.ivSplashScreen.animate().setDuration(1500).alpha(1f).withEndAction{
-//            val intent = Intent(this, LoginActivity::class.java)
-//            startActivity(intent)
-//            overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
-//            finish()
-//        }
     }
 }

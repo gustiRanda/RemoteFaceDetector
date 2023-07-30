@@ -34,7 +34,7 @@ class CameraModuleAdapter() : RecyclerView.Adapter<CameraModuleAdapter.ListViewH
         fun bind(cameraModule: CameraModule){
             with(binding){
                 tvLocation.text = cameraModule.lokasi.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
-                tvIpAddress.text = cameraModule.id
+                tvMacAddress.text = cameraModule.id
 
                 btnEdit.setOnClickListener {
                     val intent = Intent(binding.root.context, EditCameraModuleActivity::class.java)

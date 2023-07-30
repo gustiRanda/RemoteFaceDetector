@@ -80,13 +80,6 @@ class CreateAccountActivity : AppCompatActivity() {
         db.collection("akun").document(nimNIP)
             .set(account)
             .addOnSuccessListener {
-                Log.d("addAccount", "DocumentSnapshot successfully written!")
-                Log.d("addAccount", "nama = $name")
-                Log.d("addAccount", "id = $nimNIP")
-//                Log.d("addAccount", "radio = ${binding.radioGroup.checkedRadioButtonId}")
-                Log.d("addAccount", "radio = $selectedJob")
-                Log.d("addAccount", "radio = $selectedAccountType")
-                Log.d("addAccount", "radio = $finalPassword")
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
                 finish()
             }

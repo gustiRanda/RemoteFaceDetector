@@ -10,10 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mirandasoftworks.remotefacedetector.databinding.FragmentMenuBinding
@@ -44,7 +40,7 @@ class MenuFragment : Fragment() {
     private var listStudent = mutableListOf<Any>()
     private var listStaff = mutableListOf<Any>()
     private var listLecturer = mutableListOf<Any>()
-    private var list4 = mutableListOf<String>()
+    private var listMyData = mutableListOf<Any>()
     private var listAllData = mutableListOf<Any>()
 
 
@@ -159,24 +155,11 @@ class MenuFragment : Fragment() {
             setListener { view, year, month, dayOfMonth ->
 
                 val selectedMonthStart = LocalDate.parse("$dayOfMonth-${month+1}-$year", DateTimeFormatter.ofPattern("d-M-yyyy"))
-                Log.d("profileFragmentSelectedMonth", "selectedMonthStart = $selectedMonthStart")
-
                 val selectedMonthStartDate = selectedMonthStart.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                Log.d("profileFragmentSelectedMonth", "selectedMonthStartDate = $selectedMonthStartDate")
-
-                //2023-04-01 00:00:00.0
                 val selectedMonthStartTimestamp = Timestamp(selectedMonthStartDate)
-                Log.d("profileFragmentSelectedMonth", "selectedMonthStartTimestamp = $selectedMonthStartTimestamp")
-                //2023-03-01 00:00:00.0
-
                 val selectedMonthEnd = selectedMonthStart.plusMonths(1)
-                Log.d("profileFragmentSelectedMonth", "selectedMonthEnd = $selectedMonthEnd")
-
                 val selectedMonthEndDate = selectedMonthEnd.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                Log.d("profileFragmentSelectedMonth", "selectedMonthEndDate = $selectedMonthEndDate")
-
                 val selectedMonthEndTimestamp = Timestamp(selectedMonthEndDate)
-                Log.d("profileFragmentSelectedMonth", "selectedMonthEndTimestamp = $selectedMonthEndTimestamp")
 
                 val db = FirebaseFirestore.getInstance()
                 val collection = db.collection("rekap")
@@ -188,17 +171,16 @@ class MenuFragment : Fragment() {
                 query.addSnapshotListener { snapshot, e ->
                     try {
                         if (e != null) {
-                            Log.w("firebaseFirestoreProfile", "Listen failed snapshot all.", e)
+                            Log.w("getDataAll", "Listen failed snapshot all.", e)
                             return@addSnapshotListener
                         }
 
                         if (snapshot != null) {
+                            Log.w("getDataAll", "get data")
                             listStudent.clear()
                             listStaff.clear()
                             listLecturer.clear()
                             listAllData.clear()
-                            Log.d("firebaseFirestoreProfile", "Current data full snapshot1 all: ${snapshot.documents}")
-                            Log.d("firebaseFirestoreProfile", "Current data full snapshot1[0] all: ${snapshot.documents[0]}")
                             listAllData.addAll(snapshot.documents)
                             listStudent = listAllData.filter { it.toString().lowercase().contains("mahasiswa") } as MutableList<Any>
                             listLecturer = listAllData.filter { it.toString().lowercase().contains("dosen") } as MutableList<Any>
@@ -221,27 +203,10 @@ class MenuFragment : Fragment() {
                             binding.tvSumAll.text = "${listAllData.count()}"
 
                         } else {
-                            Log.d("firebaseFirestoreProfileAll", "Current data: null ")
+                            Log.d("getDataAll", "Current data: null ")
                         }
                     } catch (e: Exception){
-                        Log.d("firebaseFirestoreProfileAll", "system error $e")
-                        // null not attached to a context.
-//                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
-                        binding.tvStudentAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumStudent.text = "${listStudent.count()}"
-
-                        binding.tvStaffAttendance.text = "Kehadiran Mahasiswa Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumStaff.text = "${listStaff.count()}"
-
-                        binding.tvLecturerAttendance.text = "Kehadiran Dosen Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumLecturer.text = "${listLecturer.count()}"
-
-                        binding.tvAllAttendance.text = "Total Kehadiran Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumAll.text = "${listAllData.count()}"
+                        Log.d("getDataAll", "system error $e")
                     }
 
                 }
@@ -260,24 +225,11 @@ class MenuFragment : Fragment() {
             setListener { view, year, month, dayOfMonth ->
 
                 val selectedMonthStart = LocalDate.parse("$dayOfMonth-${month+1}-$year", DateTimeFormatter.ofPattern("d-M-yyyy"))
-                Log.d("profileFragmentSelectedMonth", "selectedMonthStart = $selectedMonthStart")
-
                 val selectedMonthStartDate = selectedMonthStart.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                Log.d("profileFragmentSelectedMonth", "selectedMonthStartDate = $selectedMonthStartDate")
-
-                //2023-04-01 00:00:00.0
                 val selectedMonthStartTimestamp = Timestamp(selectedMonthStartDate)
-                Log.d("profileFragmentSelectedMonth", "selectedMonthStartTimestamp = $selectedMonthStartTimestamp")
-                //2023-03-01 00:00:00.0
-
                 val selectedMonthEnd = selectedMonthStart.plusMonths(1)
-                Log.d("profileFragmentSelectedMonth", "selectedMonthEnd = $selectedMonthEnd")
-
                 val selectedMonthEndDate = selectedMonthEnd.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                Log.d("profileFragmentSelectedMonth", "selectedMonthEndDate = $selectedMonthEndDate")
-
                 val selectedMonthEndTimestamp = Timestamp(selectedMonthEndDate)
-                Log.d("profileFragmentSelectedMonth", "selectedMonthEndTimestamp = $selectedMonthEndTimestamp")
 
                 val db = FirebaseFirestore.getInstance()
                 val collection = db.collection("rekap")
@@ -289,85 +241,22 @@ class MenuFragment : Fragment() {
                 query.addSnapshotListener { snapshot, e ->
                     try {
                         if (e != null) {
-                            Log.w("firebaseFirestoreProfile2", "Listen failed snapshot1.", e)
+                            Log.w("getDataMy", "Listen failed snapshot1.", e)
                             return@addSnapshotListener
                         }
                         if (snapshot != null){
-                            list4.clear()
-                            set4.clear()
-                            Log.d("firebaseFirestoreProfile2", "Current data full snapshot1: ${snapshot.documents}")
-                            Log.d("firebaseFirestoreProfile2", "Current data index snapshot1[0]: ${snapshot.documents[0]}")
+                            listMyData.clear()
 
-                            for (i in snapshot.documents.indices){
-                                val dd = snapshot.documents[i]
-                                val aa = snapshot.documents[i].get("datetime")
-                                val bb = aa.toString().subSequence(18, 28).toString()
-                                val cc = aa.toString().subSequence(42, 45).toString()
+                            listMyData.addAll(snapshot.documents)
 
-
-                                fordate = Timestamp(bb.toLong())
-                                val fortime = (bb+cc).toLong()
-
-                                val simpleTimeFormat = SimpleDateFormat("KK:mm:ss aaa")
-                                val time = simpleTimeFormat.format(fortime)
-
-                                val simpleDateFormat = SimpleDateFormat("dd MM yyyy")
-                                val date = simpleDateFormat.format(fortime)
-
-                                val ee = dd.get("nama")
-//                                for (c in listOf(ee)){
-//                                    Log.d("firebaseFirestoreProfile2", "Current data ee: ${listOf(c)}")
-//                                    Log.d("firebaseFirestoreProfile2", "Current data ee: ${listOf(c)[1]}")
-//
-//                                }
-                                Log.d("firebaseFirestoreProfile2", "Current data ee: $ee")
-
-
-                                Log.d("firebaseFirestoreProfile2", "Current data id: ${i+1}")
-                                Log.d("firebaseFirestoreProfile2", "Current data nama: ${snapshot.documents[i].get("nama")}")
-                                Log.d("firebaseFirestoreProfile2", "Current data aa: $aa")
-                                Log.d("firebaseFirestoreProfile2", "Current data dd: $dd")
-                                Log.d("firebaseFirestoreProfile2", "Current data time: $time")
-                                Log.d("firebaseFirestoreProfile2", "Current data date: $date")
-
-
-
-                                ///bisa langsung dimasukkan ke set tanpa listt
-
-//                                list4.add(date)
-//                                Log.d("firebaseFirestoreProfile2", "Current data date list: $list4")
-//                                Log.d("firebaseFirestoreProfile2", "Current data date list size: ${list4.size}")
-//                                Log.d("firebaseFirestoreProfile2", "Current data date list count: ${list4.count()}")
-//
-//
-//                                set4 = list4.toMutableSet()
-//                                Log.d("firebaseFirestoreProfile2", "Current data date set: $set4")
-//                                Log.d("firebaseFirestoreProfile2", "Current data date set size: ${set4.size}")
-//                                Log.d("firebaseFirestoreProfile2", "Current data date set count: ${set4.count()}")
-
-
-
-                                //langsung masuk set
-
-                                set4.add(date)
-                                Log.d("firebaseFirestoreProfile2", "Current data date set: $set4")
-                                Log.d("firebaseFirestoreProfile2", "Current data date set size: ${set4.size}")
-                                Log.d("firebaseFirestoreProfile2", "Current data date set count: ${set4.count()}")
-
-                                binding.tvCurrentUserAttendance.text = "Kehadiran Saya Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                                    .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                                binding.tvSumCurrentUser.text = "${set4.count()}"
-                            }
+                            binding.tvCurrentUserAttendance.text = "Kehadiran Saya Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
+                                .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
+                            binding.tvSumCurrentUser.text = "${listMyData.count()}"
                         } else {
-                            Log.d("firebaseFirestoreProfile2", "Current data: null ")
+                            Log.d("getDataMy", "Current data: null ")
                         }
                     }  catch (e: Exception){
-                        Log.d("firebaseFirestoreProfile2", "system error $e")
-                        // null not attached to a context.
-//                        Toast.makeText(requireContext(), "system error", Toast.LENGTH_SHORT).show()
-                        binding.tvCurrentUserAttendance.text = "Kehadiran Saya Bulan ${selectedMonthStart.month.toString().lowercase().split(' ')
-                            .joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }} $year ="
-                        binding.tvSumCurrentUser.text = "${set4.count()}"
+                        Log.d("getDataMy", "system error $e")
                     }
                 }
             }

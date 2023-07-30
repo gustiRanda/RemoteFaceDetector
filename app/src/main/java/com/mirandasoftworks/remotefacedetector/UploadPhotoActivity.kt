@@ -27,9 +27,6 @@ class UploadPhotoActivity : AppCompatActivity() {
 
     private val pickPhoto =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(100)) { uris ->
-            // Callback is invoked after the user selects media items or closes the
-            // photo picker.
-            // Handle the returned Uri
             if (uris.isNotEmpty()) {
                 photoList.addAll(uris)
                 photoListAdapter.setData(photoList)

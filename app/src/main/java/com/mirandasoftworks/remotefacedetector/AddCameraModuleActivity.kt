@@ -22,34 +22,34 @@ class AddCameraModuleActivity : AppCompatActivity() {
 
             btnAddCameraModule.setOnClickListener {
                 val roomName = textInputEditTextRoomName.text.toString().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar { it.uppercase() } }
-                val ipAddress = textInputEditTextIpAddress.text.toString()
+                val macAddress = textInputEditTextMacAddress.text.toString()
 
                 if (roomName.isEmpty()){
                     textInputEditTextRoomName.error = "Silakan Isi Nama Ruangan"
                     textInputEditTextRoomName.requestFocus()
-                } else if (ipAddress.isEmpty()){
-                    textInputEditTextIpAddress.error = "Silakan Isi Alamat IP"
-                    textInputEditTextIpAddress.requestFocus()
+                } else if (macAddress.isEmpty()){
+                    textInputEditTextMacAddress.error = "Silakan Isi Alamat MAC"
+                    textInputEditTextMacAddress.requestFocus()
                 } else {
-                    addCameraModule(roomName, ipAddress)
+                    addCameraModule(roomName, macAddress)
                 }
             }
         }
     }
 
-    private fun addCameraModule(roomName: String, ipAddress: String) {
+    private fun addCameraModule(roomName: String, macAddress: String) {
         val db = FirebaseFirestore.getInstance()
 
         val cameraModule = hashMapOf(
-            "id" to ipAddress,
+            "id" to macAddress,
             "lokasi" to roomName
         )
 
-        db.collection("alat").document(ipAddress)
+        db.collection("alat").document(macAddress)
             .set(cameraModule)
             .addOnSuccessListener {
                 Log.d("addCameraModule", "DocumentSnapshot successfully written!")
-                Log.d("addCameraModule", "IP = $ipAddress")
+                Log.d("addCameraModule", "IP = $macAddress")
                 Log.d("addCameraModule", "Ruangan = $roomName")
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
                 finish()

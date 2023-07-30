@@ -29,14 +29,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_layout_ip_address"
+        android:id="@+id/text_input_layout_mac_address"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:hint="Alamat IP"
+        android:hint="Alamat MAC"
         app:endIconMode="clear_text"
         app:startIconDrawable="@drawable/ic_password"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@id/text_input_layout_room_name">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_input_edit_text_ip_address"
+            android:id="@+id/text_input_edit_text_mac_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"/>
@@ -59,7 +59,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_input_layout_ip_address"
+        app:layout_constraintTop_toBottomOf="@id/text_input_layout_mac_address"
         android:text="Simpan Perubahan"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

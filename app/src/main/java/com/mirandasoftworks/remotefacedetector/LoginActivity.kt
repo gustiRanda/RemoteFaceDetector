@@ -45,29 +45,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun pushLogin(username: String, password: String) {
-//        val db = Firebase.firestore
-//        val collection = db.collection("akun")
-//        val query = collection
-//            .whereEqualTo("nim_nip", username)
-//
-//        query.addSnapshotListener{ snapshot, e ->
-//            try {
-//                if (e != null){
-//                    Log.w("firebaseFirestoreProfile", "Listen failed.", e)
-//                    return@addSnapshotListener
-//                }
-//                if (snapshot != null){
-//                    Log.d("loginUsername", "Username $username ada")
-//                }
-//                else{
-//                    Log.d("loginUsername", "Username $username tidak ditemukan")
-//                }
-//            } catch (e: Exception) {
-//                Log.d("firebaseFirestoreProfile", "system error $e")
-//                Toast.makeText(this, "system error", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
 
         val initialPassword = password.toByteArray()
         Log.d("password", "initialPassword = $password")
